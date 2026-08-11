@@ -1,0 +1,68 @@
+<!--
+  Pantalla: Actividad de masa — Pelota (Nivel 5)
+
+  Pipo presenta una pelota y el estudiante debe aplicar el concepto
+  de masa eligiendo la balanza entre varias opciones.
+  Interacción diferente: aplicación del concepto aprendido.
+
+  Flujo: Mochila → Pelota → Final de Masa
+-->
+
+<section class="pantalla bienvenida" id="pantalla-actividad-pelota">
+  <!-- Paso 1: Pipo presenta la pelota -->
+  <div class="paso-experiencia" id="paso-pelota-presentacion">
+    <div class="tarjeta-bienvenida">
+      <div class="pipo-figura">
+        <img id="imagen-pipo-pelota" src="" alt="Mascota de NIDO" />
+      </div>
+      <p id="mensaje-pelota-presentacion" class="mensaje-pipo"></p>
+      <button type="button" id="boton-continuar-pelota-presentacion" class="boton-principal">Seguir</button>
+    </div>
+  </div>
+
+  <!-- Paso 2: ¿Qué instrumento usamos? -->
+  <div class="paso-experiencia oculto" id="paso-pelota-eleccion" aria-hidden="true">
+    <div class="tarjeta-bienvenida">
+      <div class="objeto-grande" aria-hidden="true">⚽</div>
+      <p id="pregunta-pelota" class="mensaje-descubrimiento"></p>
+
+      <div class="opciones-instrumento" id="opciones-pelota" role="listbox" aria-label="¿Qué instrumento usamos para conocer la masa de la pelota?">
+        <button type="button" class="opcion-instrumento" data-instrumento="balanza" role="option">
+          <span class="icono-instrumento" aria-hidden="true">⚖️</span>
+          <span class="nombre-instrumento">Balanza</span>
+        </button>
+        <button type="button" class="opcion-instrumento" data-instrumento="cinta" role="option">
+          <span class="icono-instrumento" aria-hidden="true">📏</span>
+          <span class="nombre-instrumento">Cinta métrica</span>
+        </button>
+        <button type="button" class="opcion-instrumento" data-instrumento="reloj" role="option">
+          <span class="icono-instrumento" aria-hidden="true">⏱️</span>
+          <span class="nombre-instrumento">Reloj</span>
+        </button>
+      </div>
+
+      <p id="mensaje-pelota" class="mensaje-pipo oculto" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <!-- Paso 3: Explicación y celebración -->
+  <div class="paso-experiencia oculto" id="paso-pelota-explicacion" aria-hidden="true">
+    <div class="tarjeta-bienvenida">
+      <h2>¡Muy bien! 🎉</h2>
+      <div class="pipo-figura">
+        <img id="imagen-pipo-pelota-explicacion" src="" alt="Mascota de NIDO" />
+      </div>
+      <p id="mensaje-pelota-explicacion" class="mensaje-pipo"></p>
+      <button type="button" id="boton-continuar-pelota-explicacion" class="boton-principal">Seguir</button>
+    </div>
+  </div>
+
+  <!-- Paso 4: Recompensa y final de Masa -->
+  <div class="paso-experiencia oculto" id="paso-pelota-recompensa" aria-hidden="true">
+    <div class="tarjeta-bienvenida">
+      <h2>🏆 ¡Lo lograste!</h2>
+      <p id="mensaje-pelota-recompensa" class="mensaje-descubrimiento"></p>
+      <button type="button" id="boton-siguiente-pelota" class="boton-principal">¡Seguimos!</button>
+    </div>
+  </div>
+</section>

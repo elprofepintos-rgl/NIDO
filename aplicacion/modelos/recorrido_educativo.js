@@ -44,6 +44,58 @@ const CATALOGO_RECORRIDOS = [
               cantidad: 1,
               identificador: 'estrella_masa_manzana'
             }
+          },
+          {
+            id: 'masa_banana',
+            area: 'masa',
+            orden: 2,
+            titulo: 'La banana',
+            descripcion: 'Descubrí la masa de una banana con Pipo.',
+            actividad: 'actividad_banana',
+            recompensa: {
+              tipo: 'estrella',
+              cantidad: 1,
+              identificador: 'estrella_masa_banana'
+            }
+          },
+          {
+            id: 'masa_naranja',
+            area: 'masa',
+            orden: 3,
+            titulo: 'La naranja',
+            descripcion: 'Ayudá a Pipo a descubrir la masa de una naranja.',
+            actividad: 'actividad_naranja',
+            recompensa: {
+              tipo: 'estrella',
+              cantidad: 1,
+              identificador: 'estrella_masa_naranja'
+            }
+          },
+          {
+            id: 'masa_mochila',
+            area: 'masa',
+            orden: 4,
+            titulo: 'La mochila',
+            descripcion: 'Descubrí la masa de una mochila con Pipo.',
+            actividad: 'actividad_mochila',
+            recompensa: {
+              tipo: 'estrella',
+              cantidad: 1,
+              identificador: 'estrella_masa_mochila'
+            }
+          },
+          {
+            id: 'masa_pelota',
+            area: 'masa',
+            orden: 5,
+            titulo: 'La pelota',
+            descripcion: 'Completá el recorrido descubriendo la masa de una pelota.',
+            actividad: 'actividad_pelota',
+            recompensa: {
+              tipo: 'estrella',
+              cantidad: 1,
+              identificador: 'estrella_masa_pelota'
+            }
           }
         ]
       },

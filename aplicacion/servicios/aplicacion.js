@@ -29,6 +29,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   const RUTA_MI_NIDO = 'aplicacion/pantallas/mi_nido.html';
   const RUTA_AVENTURAS = 'aplicacion/pantallas/aventuras.html';
   const RUTA_PRIMER_ENCUENTRO = 'aplicacion/pantallas/primer_encuentro.html';
+  const RUTA_ACTIVIDAD_BANANA = 'aplicacion/pantallas/actividad_banana.html';
+  const RUTA_ACTIVIDAD_NARANJA = 'aplicacion/pantallas/actividad_naranja.html';
+  const RUTA_ACTIVIDAD_MOCHILA = 'aplicacion/pantallas/actividad_mochila.html';
+  const RUTA_ACTIVIDAD_PELOTA = 'aplicacion/pantallas/actividad_pelota.html';
 
   /**
    * Muestra un mensaje básico cuando una pantalla no se puede cargar.
@@ -584,13 +588,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 
           if (desbloqueado) {
             tarjetaNivel.addEventListener('click', () => {
-              try {
-                window.NIDO.servicios.aventuras.iniciarAventura('masa');
-              } catch (error) {
-                console.error('NIDO: no se pudo iniciar la aventura.', error);
-                return;
+              // Abrir la actividad correspondiente al nivel declarado.
+              if (nivel.actividad === 'primer_encuentro_masa' || nivel.actividad === 'actividad_banana') {
+                if (nivel.id === 'masa_manzana') {
+                  try {
+                    window.NIDO.servicios.aventuras.iniciarAventura('masa');
+                  } catch (error) {
+                    console.error('NIDO: no se pudo iniciar la aventura.', error);
+                    return;
+                  }
+                  iniciarPrimerEncuentro();
+                } else if (nivel.id === 'masa_banana') {
+                  iniciarActividadBanana();
+                }
+              } else if (nivel.actividad === 'actividad_naranja') {
+                iniciarActividadNaranja();
+              } else if (nivel.actividad === 'actividad_mochila') {
+                iniciarActividadMochila();
+              } else if (nivel.actividad === 'actividad_pelota') {
+                iniciarActividadPelota();
               }
-              iniciarPrimerEncuentro();
             });
           } else {
             tarjetaNivel.disabled = true;
@@ -877,7 +894,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         } catch (error) {
           console.error('NIDO: no se pudo completar el nivel educativo.', error);
         }
-        iniciarMiNido();
+        // Continuar con la siguiente actividad del recorrido.
+        iniciarActividadBanana();
       });
     }
   };
@@ -894,6 +912,539 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
     prepararPrimerEncuentro();
+  };
+
+  // ------------------------------------------------------------
+  // Actividad: Banana (Nivel 2)
+  // ------------------------------------------------------------
+
+  /**
+   * Prepara la actividad de la banana.
+   * Pipo presenta una banana y el estudiante elige el instrumento correcto.
+   */
+  const prepararActividadBanana = () => {
+    const pasos = [
+      document.getElementById('paso-banana-presentacion'),
+      document.getElementById('paso-banana-eleccion'),
+      document.getElementById('paso-banana-explicacion'),
+      document.getElementById('paso-banana-recompensa')
+    ];
+
+    const imagenPipoBanana = document.getElementById('imagen-pipo-banana');
+    const mensajeBananaPresentacion = document.getElementById('mensaje-banana-presentacion');
+    const botonContinuarPresentacion = document.getElementById('boton-continuar-banana-presentacion');
+
+    const preguntaBanana = document.getElementById('pregunta-banana');
+    const opcionesBanana = document.getElementById('opciones-banana');
+    const mensajeBanana = document.getElementById('mensaje-banana');
+
+    const imagenPipoBananaExplicacion = document.getElementById('imagen-pipo-banana-explicacion');
+    const mensajeBananaExplicacion = document.getElementById('mensaje-banana-explicacion');
+    const botonContinuarExplicacion = document.getElementById('boton-continuar-banana-explicacion');
+
+    const mensajeBananaRecompensa = document.getElementById('mensaje-banana-recompensa');
+    const botonSiguiente = document.getElementById('boton-siguiente-banana');
+
+    const mascota = window.NIDO.servicios.mascotas.obtenerMascotaDelEstudiante();
+    const nombreMascota = mascota ? mascota.nombre : 'Pipo';
+    const imagenMascota = mascota ? mascota.imagen : '';
+
+    if (imagenPipoBanana && imagenMascota) {
+      imagenPipoBanana.src = imagenMascota;
+      imagenPipoBanana.alt = nombreMascota;
+    }
+    if (imagenPipoBananaExplicacion && imagenMascota) {
+      imagenPipoBananaExplicacion.src = imagenMascota;
+      imagenPipoBananaExplicacion.alt = nombreMascota;
+    }
+
+    const mostrarPaso = (indice) => mostrarSeccion(pasos[indice], pasos);
+
+    if (mensajeBananaPresentacion) {
+      mensajeBananaPresentacion.textContent = '¡Mirá esta banana! ¿Descubrimos su masa?';
+    }
+
+    if (botonContinuarPresentacion) {
+      botonContinuarPresentacion.addEventListener('click', () => {
+        mostrarPaso(1);
+      });
+    }
+
+    if (preguntaBanana) {
+      preguntaBanana.textContent = '¿Con qué podemos conocer la masa de la banana?';
+    }
+
+    if (opcionesBanana) {
+      opcionesBanana.addEventListener('click', (evento) => {
+        const boton = evento.target.closest('.opcion-instrumento');
+        if (!boton) {
+          return;
+        }
+
+        const instrumento = boton.dataset.instrumento;
+
+        if (instrumento === 'balanza') {
+          if (mensajeBanana) {
+            mensajeBanana.textContent = '¡Muy bien! 🎉';
+            mensajeBanana.classList.remove('oculto');
+          }
+          boton.classList.add('opcion-correcta');
+          setTimeout(() => {
+            mostrarPaso(2);
+          }, 1200);
+        } else {
+          if (mensajeBanana) {
+            mensajeBanana.textContent = 'Casi... Probemos otra vez.';
+            mensajeBanana.classList.remove('oculto');
+          }
+          boton.classList.add('opcion-intento');
+          setTimeout(() => {
+            boton.classList.remove('opcion-intento');
+          }, 800);
+        }
+      });
+    }
+
+    if (mensajeBananaExplicacion) {
+      mensajeBananaExplicacion.textContent =
+        'La masa de la banana se conoce usando una balanza. ' +
+        'La masa nos indica cuánta materia tiene.';
+    }
+
+    if (botonContinuarExplicacion) {
+      botonContinuarExplicacion.addEventListener('click', () => {
+        mostrarPaso(3);
+      });
+    }
+
+    if (mensajeBananaRecompensa) {
+      mensajeBananaRecompensa.textContent = '⭐ ¡Descubrimiento conseguido! ' + nombreMascota + ' está muy contento.';
+    }
+
+    if (botonSiguiente) {
+      botonSiguiente.addEventListener('click', () => {
+        try {
+          window.NIDO.servicios.progresoEducativo.completarNivel('masa_banana');
+        } catch (error) {
+          console.error('NIDO: no se pudo completar el nivel de banana.', error);
+        }
+        iniciarActividadNaranja();
+      });
+    }
+  };
+
+  /**
+   * Carga la actividad de la banana.
+   */
+  const iniciarActividadBanana = async () => {
+    try {
+      await cargarPantalla(RUTA_ACTIVIDAD_BANANA);
+    } catch (error) {
+      console.error(error);
+      mostrarPantallaDeFalla('No se pudo cargar la actividad.');
+      return;
+    }
+    prepararActividadBanana();
+  };
+
+  // ------------------------------------------------------------
+  // Actividad: Naranja (Nivel 3)
+  // ------------------------------------------------------------
+
+  /**
+   * Prepara la actividad de la naranja.
+   * Pipo presenta una naranja y el estudiante elige el instrumento correcto.
+   */
+  const prepararActividadNaranja = () => {
+    const pasos = [
+      document.getElementById('paso-naranja-presentacion'),
+      document.getElementById('paso-naranja-eleccion'),
+      document.getElementById('paso-naranja-explicacion'),
+      document.getElementById('paso-naranja-recompensa')
+    ];
+
+    const imagenPipoNaranja = document.getElementById('imagen-pipo-naranja');
+    const mensajeNaranjaPresentacion = document.getElementById('mensaje-naranja-presentacion');
+    const botonContinuarPresentacion = document.getElementById('boton-continuar-naranja-presentacion');
+
+    const preguntaNaranja = document.getElementById('pregunta-naranja');
+    const opcionesNaranja = document.getElementById('opciones-naranja');
+    const mensajeNaranja = document.getElementById('mensaje-naranja');
+
+    const imagenPipoNaranjaExplicacion = document.getElementById('imagen-pipo-naranja-explicacion');
+    const mensajeNaranjaExplicacion = document.getElementById('mensaje-naranja-explicacion');
+    const botonContinuarExplicacion = document.getElementById('boton-continuar-naranja-explicacion');
+
+    const mensajeNaranjaRecompensa = document.getElementById('mensaje-naranja-recompensa');
+    const botonSiguiente = document.getElementById('boton-siguiente-naranja');
+
+    const mascota = window.NIDO.servicios.mascotas.obtenerMascotaDelEstudiante();
+    const nombreMascota = mascota ? mascota.nombre : 'Pipo';
+    const imagenMascota = mascota ? mascota.imagen : '';
+
+    if (imagenPipoNaranja && imagenMascota) {
+      imagenPipoNaranja.src = imagenMascota;
+      imagenPipoNaranja.alt = nombreMascota;
+    }
+    if (imagenPipoNaranjaExplicacion && imagenMascota) {
+      imagenPipoNaranjaExplicacion.src = imagenMascota;
+      imagenPipoNaranjaExplicacion.alt = nombreMascota;
+    }
+
+    const mostrarPaso = (indice) => mostrarSeccion(pasos[indice], pasos);
+
+    if (mensajeNaranjaPresentacion) {
+      mensajeNaranjaPresentacion.textContent = '¡Mirá esta naranja! ¿Descubrimos su masa?';
+    }
+
+    if (botonContinuarPresentacion) {
+      botonContinuarPresentacion.addEventListener('click', () => {
+        mostrarPaso(1);
+      });
+    }
+
+    if (preguntaNaranja) {
+      preguntaNaranja.textContent = '¿Cuál podemos usar para conocer la masa de la naranja?';
+    }
+
+    if (opcionesNaranja) {
+      opcionesNaranja.addEventListener('click', (evento) => {
+        const boton = evento.target.closest('.opcion-instrumento');
+        if (!boton) {
+          return;
+        }
+
+        const instrumento = boton.dataset.instrumento;
+
+        if (instrumento === 'balanza') {
+          if (mensajeNaranja) {
+            mensajeNaranja.textContent = '¡Muy bien! 🎉';
+            mensajeNaranja.classList.remove('oculto');
+          }
+          boton.classList.add('opcion-correcta');
+          setTimeout(() => {
+            mostrarPaso(2);
+          }, 1200);
+        } else {
+          if (mensajeNaranja) {
+            mensajeNaranja.textContent = 'Casi... Probemos otra vez.';
+            mensajeNaranja.classList.remove('oculto');
+          }
+          boton.classList.add('opcion-intento');
+          setTimeout(() => {
+            boton.classList.remove('opcion-intento');
+          }, 800);
+        }
+      });
+    }
+
+    if (mensajeNaranjaExplicacion) {
+      mensajeNaranjaExplicacion.textContent =
+        'La masa de la naranja se conoce usando una balanza. ' +
+        'La masa nos indica cuánta materia tiene.';
+    }
+
+    if (botonContinuarExplicacion) {
+      botonContinuarExplicacion.addEventListener('click', () => {
+        mostrarPaso(3);
+      });
+    }
+
+    if (mensajeNaranjaRecompensa) {
+      mensajeNaranjaRecompensa.textContent = '⭐ ¡Descubrimiento conseguido! ' + nombreMascota + ' está muy contento.';
+    }
+
+    if (botonSiguiente) {
+      botonSiguiente.addEventListener('click', () => {
+        try {
+          window.NIDO.servicios.progresoEducativo.completarNivel('masa_naranja');
+        } catch (error) {
+          console.error('NIDO: no se pudo completar el nivel de naranja.', error);
+        }
+        iniciarActividadMochila();
+      });
+    }
+  };
+
+  /**
+   * Carga la actividad de la naranja.
+   */
+  const iniciarActividadNaranja = async () => {
+    try {
+      await cargarPantalla(RUTA_ACTIVIDAD_NARANJA);
+    } catch (error) {
+      console.error(error);
+      mostrarPantallaDeFalla('No se pudo cargar la actividad.');
+      return;
+    }
+    prepararActividadNaranja();
+  };
+
+  // ------------------------------------------------------------
+  // Actividad: Mochila (Nivel 4)
+  // ------------------------------------------------------------
+
+  /**
+   * Prepara la actividad de la mochila.
+   * Pipo presenta una mochila y el estudiante elige qué hacer.
+   */
+  const prepararActividadMochila = () => {
+    const pasos = [
+      document.getElementById('paso-mochila-presentacion'),
+      document.getElementById('paso-mochila-eleccion'),
+      document.getElementById('paso-mochila-explicacion'),
+      document.getElementById('paso-mochila-recompensa')
+    ];
+
+    const imagenPipoMochila = document.getElementById('imagen-pipo-mochila');
+    const mensajeMochilaPresentacion = document.getElementById('mensaje-mochila-presentacion');
+    const botonContinuarPresentacion = document.getElementById('boton-continuar-mochila-presentacion');
+
+    const preguntaMochila = document.getElementById('pregunta-mochila');
+    const opcionesMochila = document.getElementById('opciones-mochila');
+    const mensajeMochila = document.getElementById('mensaje-mochila');
+
+    const imagenPipoMochilaExplicacion = document.getElementById('imagen-pipo-mochila-explicacion');
+    const mensajeMochilaExplicacion = document.getElementById('mensaje-mochila-explicacion');
+    const botonContinuarExplicacion = document.getElementById('boton-continuar-mochila-explicacion');
+
+    const mensajeMochilaRecompensa = document.getElementById('mensaje-mochila-recompensa');
+    const botonSiguiente = document.getElementById('boton-siguiente-mochila');
+
+    const mascota = window.NIDO.servicios.mascotas.obtenerMascotaDelEstudiante();
+    const nombreMascota = mascota ? mascota.nombre : 'Pipo';
+    const imagenMascota = mascota ? mascota.imagen : '';
+
+    if (imagenPipoMochila && imagenMascota) {
+      imagenPipoMochila.src = imagenMascota;
+      imagenPipoMochila.alt = nombreMascota;
+    }
+    if (imagenPipoMochilaExplicacion && imagenMascota) {
+      imagenPipoMochilaExplicacion.src = imagenMascota;
+      imagenPipoMochilaExplicacion.alt = nombreMascota;
+    }
+
+    const mostrarPaso = (indice) => mostrarSeccion(pasos[indice], pasos);
+
+    if (mensajeMochilaPresentacion) {
+      mensajeMochilaPresentacion.textContent = '¡Mirá esta mochila! ¿Descubrimos su masa?';
+    }
+
+    if (botonContinuarPresentacion) {
+      botonContinuarPresentacion.addEventListener('click', () => {
+        mostrarPaso(1);
+      });
+    }
+
+    if (preguntaMochila) {
+      preguntaMochila.textContent = '¿Qué hacemos para conocer la masa de la mochila?';
+    }
+
+    if (opcionesMochila) {
+      opcionesMochila.addEventListener('click', (evento) => {
+        const boton = evento.target.closest('.opcion-instrumento');
+        if (!boton) {
+          return;
+        }
+
+        const instrumento = boton.dataset.instrumento;
+
+        if (instrumento === 'balanza') {
+          if (mensajeMochila) {
+            mensajeMochila.textContent = '¡Muy bien! 🎉';
+            mensajeMochila.classList.remove('oculto');
+          }
+          boton.classList.add('opcion-correcta');
+          setTimeout(() => {
+            mostrarPaso(2);
+          }, 1200);
+        } else {
+          if (mensajeMochila) {
+            mensajeMochila.textContent = 'Casi... Probemos otra vez.';
+            mensajeMochila.classList.remove('oculto');
+          }
+          boton.classList.add('opcion-intento');
+          setTimeout(() => {
+            boton.classList.remove('opcion-intento');
+          }, 800);
+        }
+      });
+    }
+
+    if (mensajeMochilaExplicacion) {
+      mensajeMochilaExplicacion.textContent =
+        'La masa de la mochila se conoce poniéndola en la balanza. ' +
+        'La masa nos indica cuánta materia tiene.';
+    }
+
+    if (botonContinuarExplicacion) {
+      botonContinuarExplicacion.addEventListener('click', () => {
+        mostrarPaso(3);
+      });
+    }
+
+    if (mensajeMochilaRecompensa) {
+      mensajeMochilaRecompensa.textContent = '⭐ ¡Descubrimiento conseguido! ' + nombreMascota + ' está muy contento.';
+    }
+
+    if (botonSiguiente) {
+      botonSiguiente.addEventListener('click', () => {
+        try {
+          window.NIDO.servicios.progresoEducativo.completarNivel('masa_mochila');
+        } catch (error) {
+          console.error('NIDO: no se pudo completar el nivel de mochila.', error);
+        }
+        iniciarActividadPelota();
+      });
+    }
+  };
+
+  /**
+   * Carga la actividad de la mochila.
+   */
+  const iniciarActividadMochila = async () => {
+    try {
+      await cargarPantalla(RUTA_ACTIVIDAD_MOCHILA);
+    } catch (error) {
+      console.error(error);
+      mostrarPantallaDeFalla('No se pudo cargar la actividad.');
+      return;
+    }
+    prepararActividadMochila();
+  };
+
+  // ------------------------------------------------------------
+  // Actividad: Pelota (Nivel 5)
+  // ------------------------------------------------------------
+
+  /**
+   * Prepara la actividad de la pelota.
+   * Pipo presenta una pelota y el estudiante elige el instrumento correcto.
+   */
+  const prepararActividadPelota = () => {
+    const pasos = [
+      document.getElementById('paso-pelota-presentacion'),
+      document.getElementById('paso-pelota-eleccion'),
+      document.getElementById('paso-pelota-explicacion'),
+      document.getElementById('paso-pelota-recompensa')
+    ];
+
+    const imagenPipoPelota = document.getElementById('imagen-pipo-pelota');
+    const mensajePelotaPresentacion = document.getElementById('mensaje-pelota-presentacion');
+    const botonContinuarPresentacion = document.getElementById('boton-continuar-pelota-presentacion');
+
+    const preguntaPelota = document.getElementById('pregunta-pelota');
+    const opcionesPelota = document.getElementById('opciones-pelota');
+    const mensajePelota = document.getElementById('mensaje-pelota');
+
+    const imagenPipoPelotaExplicacion = document.getElementById('imagen-pipo-pelota-explicacion');
+    const mensajePelotaExplicacion = document.getElementById('mensaje-pelota-explicacion');
+    const botonContinuarExplicacion = document.getElementById('boton-continuar-pelota-explicacion');
+
+    const mensajePelotaRecompensa = document.getElementById('mensaje-pelota-recompensa');
+    const botonSiguiente = document.getElementById('boton-siguiente-pelota');
+
+    const mascota = window.NIDO.servicios.mascotas.obtenerMascotaDelEstudiante();
+    const nombreMascota = mascota ? mascota.nombre : 'Pipo';
+    const imagenMascota = mascota ? mascota.imagen : '';
+
+    if (imagenPipoPelota && imagenMascota) {
+      imagenPipoPelota.src = imagenMascota;
+      imagenPipoPelota.alt = nombreMascota;
+    }
+    if (imagenPipoPelotaExplicacion && imagenMascota) {
+      imagenPipoPelotaExplicacion.src = imagenMascota;
+      imagenPipoPelotaExplicacion.alt = nombreMascota;
+    }
+
+    const mostrarPaso = (indice) => mostrarSeccion(pasos[indice], pasos);
+
+    if (mensajePelotaPresentacion) {
+      mensajePelotaPresentacion.textContent = '¡Mirá esta pelota! ¿Descubrimos su masa?';
+    }
+
+    if (botonContinuarPresentacion) {
+      botonContinuarPresentacion.addEventListener('click', () => {
+        mostrarPaso(1);
+      });
+    }
+
+    if (preguntaPelota) {
+      preguntaPelota.textContent = '¿Qué instrumento usamos para conocer la masa de la pelota?';
+    }
+
+    if (opcionesPelota) {
+      opcionesPelota.addEventListener('click', (evento) => {
+        const boton = evento.target.closest('.opcion-instrumento');
+        if (!boton) {
+          return;
+        }
+
+        const instrumento = boton.dataset.instrumento;
+
+        if (instrumento === 'balanza') {
+          if (mensajePelota) {
+            mensajePelota.textContent = '¡Muy bien! 🎉';
+            mensajePelota.classList.remove('oculto');
+          }
+          boton.classList.add('opcion-correcta');
+          setTimeout(() => {
+            mostrarPaso(2);
+          }, 1200);
+        } else {
+          if (mensajePelota) {
+            mensajePelota.textContent = 'Casi... Probemos otra vez.';
+            mensajePelota.classList.remove('oculto');
+          }
+          boton.classList.add('opcion-intento');
+          setTimeout(() => {
+            boton.classList.remove('opcion-intento');
+          }, 800);
+        }
+      });
+    }
+
+    if (mensajePelotaExplicacion) {
+      mensajePelotaExplicacion.textContent =
+        'La masa de la pelota se conoce usando una balanza. ' +
+        'La masa nos indica cuánta materia tiene.';
+    }
+
+    if (botonContinuarExplicacion) {
+      botonContinuarExplicacion.addEventListener('click', () => {
+        mostrarPaso(3);
+      });
+    }
+
+    if (mensajePelotaRecompensa) {
+      mensajePelotaRecompensa.textContent = '⭐ ¡Descubrimiento conseguido! ' + nombreMascota + ' está muy contento.';
+    }
+
+    if (botonSiguiente) {
+      botonSiguiente.addEventListener('click', () => {
+        try {
+          window.NIDO.servicios.progresoEducativo.completarNivel('masa_pelota');
+        } catch (error) {
+          console.error('NIDO: no se pudo completar el nivel de pelota.', error);
+        }
+        // Masa completada: celebrar y volver a Mi NIDO.
+        iniciarMiNido();
+      });
+    }
+  };
+
+  /**
+   * Carga la actividad de la pelota.
+   */
+  const iniciarActividadPelota = async () => {
+    try {
+      await cargarPantalla(RUTA_ACTIVIDAD_PELOTA);
+    } catch (error) {
+      console.error(error);
+      mostrarPantallaDeFalla('No se pudo cargar la actividad.');
+      return;
+    }
+    prepararActividadPelota();
   };
 
   // ------------------------------------------------------------

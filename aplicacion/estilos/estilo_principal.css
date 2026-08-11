@@ -377,6 +377,13 @@ body {
   animation: flotar-manzana 3s ease-in-out infinite;
 }
 
+.objeto-grande {
+  font-size: 5rem;
+  line-height: 1;
+  margin: 0 0 16px;
+  animation: flotar-manzana 3s ease-in-out infinite;
+}
+
 @keyframes flotar-manzana {
   0%,
   100% {

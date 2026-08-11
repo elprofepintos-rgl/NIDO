@@ -1,0 +1,68 @@
+<!--
+  Pantalla: Actividad de masa — Banana (Nivel 2)
+
+  Pipo presenta una banana y el estudiante elige el instrumento correcto
+  para descubrir su masa. Interacción diferente a la manzana: se presentan
+  objetos cotidianos en lugar de instrumentos.
+
+  Flujo: Manzana → Banana → Siguiente nivel
+-->
+
+<section class="pantalla bienvenida" id="pantalla-actividad-banana">
+  <!-- Paso 1: Pipo presenta la banana -->
+  <div class="paso-experiencia" id="paso-banana-presentacion">
+    <div class="tarjeta-bienvenida">
+      <div class="pipo-figura">
+        <img id="imagen-pipo-banana" src="" alt="Mascota de NIDO" />
+      </div>
+      <p id="mensaje-banana-presentacion" class="mensaje-pipo"></p>
+      <button type="button" id="boton-continuar-banana-presentacion" class="boton-principal">Seguir</button>
+    </div>
+  </div>
+
+  <!-- Paso 2: ¿Qué usamos para medir la banana? -->
+  <div class="paso-experiencia oculto" id="paso-banana-eleccion" aria-hidden="true">
+    <div class="tarjeta-bienvenida">
+      <div class="objeto-grande" aria-hidden="true">🍌</div>
+      <p id="pregunta-banana" class="mensaje-descubrimiento"></p>
+
+      <div class="opciones-instrumento" id="opciones-banana" role="listbox" aria-label="¿Con qué puedo saber la masa de la banana?">
+        <button type="button" class="opcion-instrumento" data-instrumento="balanza" role="option">
+          <span class="icono-instrumento" aria-hidden="true">⚖️</span>
+          <span class="nombre-instrumento">Balanza</span>
+        </button>
+        <button type="button" class="opcion-instrumento" data-instrumento="regla" role="option">
+          <span class="icono-instrumento" aria-hidden="true">📏</span>
+          <span class="nombre-instrumento">Regla</span>
+        </button>
+        <button type="button" class="opcion-instrumento" data-instrumento="termometro" role="option">
+          <span class="icono-instrumento" aria-hidden="true">🌡️</span>
+          <span class="nombre-instrumento">Termómetro</span>
+        </button>
+      </div>
+
+      <p id="mensaje-banana" class="mensaje-pipo oculto" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <!-- Paso 3: Explicación y celebración -->
+  <div class="paso-experiencia oculto" id="paso-banana-explicacion" aria-hidden="true">
+    <div class="tarjeta-bienvenida">
+      <h2>¡Muy bien! 🎉</h2>
+      <div class="pipo-figura">
+        <img id="imagen-pipo-banana-explicacion" src="" alt="Mascota de NIDO" />
+      </div>
+      <p id="mensaje-banana-explicacion" class="mensaje-pipo"></p>
+      <button type="button" id="boton-continuar-banana-explicacion" class="boton-principal">Seguir</button>
+    </div>
+  </div>
+
+  <!-- Paso 4: Recompensa y siguiente nivel -->
+  <div class="paso-experiencia oculto" id="paso-banana-recompensa" aria-hidden="true">
+    <div class="tarjeta-bienvenida">
+      <h2>🏆 ¡Lo lograste!</h2>
+      <p id="mensaje-banana-recompensa" class="mensaje-descubrimiento"></p>
+      <button type="button" id="boton-siguiente-banana" class="boton-principal">¡Seguimos!</button>
+    </div>
+  </div>
+</section>
