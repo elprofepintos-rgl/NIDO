@@ -441,6 +441,57 @@ body {
   background-color: #fff3e3;
 }
 
+/* Observación de la balanza */
+.balanza-observacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 0 20px;
+  padding: 16px;
+  border: 2px solid var(--secundario);
+  border-radius: 18px;
+  background-color: var(--gris-suave);
+  animation: flotar-manzana 3s ease-in-out infinite;
+}
+
+/* Consolidación: ¿qué estamos midiendo? */
+.opciones-consolidacion {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.opcion-consolidacion {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border: 2px solid var(--secundario);
+  border-radius: 16px;
+  background-color: var(--gris-suave);
+  color: var(--texto);
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.opcion-consolidacion:hover,
+.opcion-consolidacion:focus {
+  transform: translateY(-2px);
+  opacity: 0.95;
+}
+
+.icono-consolidacion {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.nombre-consolidacion {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
 /* Presentación inicial de NIDO */
 .pantalla-presentacion {
   position: fixed;

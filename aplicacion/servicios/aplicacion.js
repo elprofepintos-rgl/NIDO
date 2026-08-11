@@ -494,13 +494,29 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   /**
    * Prepara la experiencia del primer encuentro con la mascota.
-   * Presenta a la mascota, introduce la manzana y la primera actividad.
+   *
+   * Secuencia didáctica completa sobre MASA:
+   * 1. Pipo se presenta.
+   * 2. Pipo muestra la manzana.
+   * 3. Pipo pregunta si queremos saber su masa.
+   * 4. Actividad: elegir el instrumento para medir la masa (balanza).
+   * 5. Explicación breve: la masa se mide con una balanza.
+   * 6. Observación de la balanza con la manzana (150 g).
+   * 7. Pequeña consolidación: ¿qué estamos midiendo?
+   * 8. Celebración final.
+   *
+   * Concepto científico: la masa nos indica cuánta materia tiene un objeto.
+   * La masa de las cosas se mide con una balanza.
    */
   const prepararPrimerEncuentro = () => {
     const pasos = [
       document.getElementById('paso-presentacion'),
       document.getElementById('paso-manzana'),
+      document.getElementById('paso-queremos-masa'),
       document.getElementById('paso-actividad'),
+      document.getElementById('paso-explicacion-masa'),
+      document.getElementById('paso-observacion-balanza'),
+      document.getElementById('paso-consolidacion'),
       document.getElementById('paso-final')
     ];
 
@@ -512,9 +528,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     const mensajeManzana = document.getElementById('mensaje-manzana');
     const botonContinuarManzana = document.getElementById('boton-continuar-manzana');
 
+    const mensajeQueremosMasa = document.getElementById('mensaje-queremos-masa');
+    const botonContinuarMasa = document.getElementById('boton-continuar-masa');
+
     const preguntaActividad = document.getElementById('pregunta-actividad');
     const opcionesInstrumento = document.getElementById('opciones-instrumento');
     const mensajeRespuesta = document.getElementById('mensaje-respuesta');
+
+    const imagenPipoExplicacion = document.getElementById('imagen-pipo-explicacion');
+    const mensajeExplicacionMasa = document.getElementById('mensaje-explicacion-masa');
+    const botonContinuarExplicacion = document.getElementById('boton-continuar-explicacion');
+
+    const mensajeObservacionBalanza = document.getElementById('mensaje-observacion-balanza');
+    const botonContinuarObservacion = document.getElementById('boton-continuar-observacion');
+
+    const preguntaConsolidacion = document.getElementById('pregunta-consolidacion');
+    const opcionesConsolidacion = document.getElementById('opciones-consolidacion');
+    const mensajeConsolidacion = document.getElementById('mensaje-consolidacion');
 
     const imagenPipoFinal = document.getElementById('imagen-pipo-final');
     const mensajeFinal = document.getElementById('mensaje-final');
@@ -538,19 +568,24 @@ document.addEventListener('DOMContentLoaded', async () => {
       saludoEncuentro.textContent = '¡Hola, ' + estudiante.nombre + '!';
     }
 
-    // 4. Asignar la imagen de la mascota.
+    // 4. Asignar la imagen de la mascota en todos los pasos donde aparece.
     if (imagenPipoEncuentro && imagenMascota) {
       imagenPipoEncuentro.src = imagenMascota;
       imagenPipoEncuentro.alt = nombreMascota;
+    }
+    if (imagenPipoExplicacion && imagenMascota) {
+      imagenPipoExplicacion.src = imagenMascota;
+      imagenPipoExplicacion.alt = nombreMascota;
     }
     if (imagenPipoFinal && imagenMascota) {
       imagenPipoFinal.src = imagenMascota;
       imagenPipoFinal.alt = nombreMascota;
     }
 
-    // 5. Mensajes de presentación.
+    // 5. Mensajes de la secuencia.
     const mostrarPaso = (indice) => mostrarSeccion(pasos[indice], pasos);
 
+    // Momento 1: Pipo se presenta.
     if (mensajePresentacion) {
       mensajePresentacion.textContent = 'Soy ' + nombreMascota + '. ¿Me ayudás a descubrir algo?';
     }
@@ -561,8 +596,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     }
 
+    // Momento 2: Pipo muestra la manzana.
     if (mensajeManzana) {
-      mensajeManzana.textContent = 'Mirá esta manzana.';
+      mensajeManzana.textContent = '¡Mirá esta manzana!';
     }
 
     if (botonContinuarManzana) {
@@ -571,11 +607,22 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     }
 
+    // Momento 3: ¿Queremos saber su masa?
+    if (mensajeQueremosMasa) {
+      mensajeQueremosMasa.textContent = '¿Queremos saber su masa?';
+    }
+
+    if (botonContinuarMasa) {
+      botonContinuarMasa.addEventListener('click', () => {
+        mostrarPaso(3);
+      });
+    }
+
+    // Momento 4: Actividad — elegir el instrumento.
     if (preguntaActividad) {
       preguntaActividad.textContent = '¿Con qué podemos medir la masa de una manzana?';
     }
 
-    // 6. Manejar la selección de instrumento.
     if (opcionesInstrumento) {
       opcionesInstrumento.addEventListener('click', (evento) => {
         const boton = evento.target.closest('.opcion-instrumento');
@@ -586,23 +633,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         const instrumento = boton.dataset.instrumento;
 
         if (instrumento === 'balanza') {
-          // Respuesta correcta.
+          // Respuesta correcta: devolución positiva inmediata.
           if (mensajeRespuesta) {
-            mensajeRespuesta.textContent = '¡Muy bien! 🎉 La masa de las cosas se mide con una balanza.';
+            mensajeRespuesta.textContent = '¡Muy bien! 🎉';
             mensajeRespuesta.classList.remove('oculto');
           }
-          // Pequeña celebración visual y luego pasar al final.
           boton.classList.add('opcion-correcta');
           setTimeout(() => {
-            if (mensajeFinal) {
-              mensajeFinal.textContent = 'La masa nos indica cuánta materia tiene un objeto. ' + nombreMascota + ' y vos lo descubrieron juntos.';
-            }
-            mostrarPaso(3);
-          }, 1500);
+            mostrarPaso(4);
+          }, 1200);
         } else {
-          // Respuesta incorrecta: acompañar y permitir reintentar.
+          // Respuesta incorrecta: acompañar sin penalizar y permitir reintentar.
           if (mensajeRespuesta) {
-            mensajeRespuesta.textContent = 'Probemos otra vez. Miremos las opciones juntos.';
+            mensajeRespuesta.textContent = 'Casi... Probemos otra vez.';
             mensajeRespuesta.classList.remove('oculto');
           }
           boton.classList.add('opcion-intento');
@@ -611,6 +654,77 @@ document.addEventListener('DOMContentLoaded', async () => {
           }, 800);
         }
       });
+    }
+
+    // Momento 5: Explicación breve de la masa.
+    if (mensajeExplicacionMasa) {
+      mensajeExplicacionMasa.textContent =
+        'La masa de las cosas se mide con una balanza. ' +
+        'La masa nos indica cuánta materia tiene un objeto.';
+    }
+
+    if (botonContinuarExplicacion) {
+      botonContinuarExplicacion.addEventListener('click', () => {
+        mostrarPaso(5);
+      });
+    }
+
+    // Momento 6: Observación de la balanza con la manzana.
+    if (mensajeObservacionBalanza) {
+      mensajeObservacionBalanza.textContent =
+        '¡Mirá! La balanza nos ayuda a conocer la masa de la manzana.';
+    }
+
+    if (botonContinuarObservacion) {
+      botonContinuarObservacion.addEventListener('click', () => {
+        mostrarPaso(6);
+      });
+    }
+
+    // Momento 7: Pequeña consolidación.
+    if (preguntaConsolidacion) {
+      preguntaConsolidacion.textContent = '¿Qué estamos midiendo?';
+    }
+
+    if (opcionesConsolidacion) {
+      opcionesConsolidacion.addEventListener('click', (evento) => {
+        const boton = evento.target.closest('.opcion-consolidacion');
+        if (!boton) {
+          return;
+        }
+
+        const respuesta = boton.dataset.respuesta;
+
+        if (respuesta === 'masa') {
+          // Respuesta correcta.
+          if (mensajeConsolidacion) {
+            mensajeConsolidacion.textContent =
+              '¡Exacto! 🎉 Estamos midiendo la masa. ' +
+              nombreMascota + ' y vos están aprendiendo juntos.';
+            mensajeConsolidacion.classList.remove('oculto');
+          }
+          boton.classList.add('opcion-correcta');
+          setTimeout(() => {
+            mostrarPaso(7);
+          }, 1500);
+        } else {
+          // Respuesta incorrecta: acompañar y permitir reintentar.
+          if (mensajeConsolidacion) {
+            mensajeConsolidacion.textContent = 'Casi... Probemos otra vez.';
+            mensajeConsolidacion.classList.remove('oculto');
+          }
+          boton.classList.add('opcion-intento');
+          setTimeout(() => {
+            boton.classList.remove('opcion-intento');
+          }, 800);
+        }
+      });
+    }
+
+    // Momento 8: Celebración final.
+    if (mensajeFinal) {
+      mensajeFinal.textContent =
+        'Hoy aprendimos que la masa de las cosas se mide con una balanza.';
     }
 
     if (botonVolverMiNido) {
@@ -639,23 +753,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   // ------------------------------------------------------------
 
   /**
-   * Indica si la presentación inicial ya fue vista en esta instalación.
-   * @returns {boolean} True si la presentación ya fue vista.
-   */
-  const presentacionYaVista = () => {
-    const presentacion = window.NIDO.servicios.almacenamiento.obtenerPresentacion();
-    return Boolean(presentacion && presentacion.vista === true);
-  };
-
-  /**
-   * Registra en el almacenamiento local que la presentación inicial ya fue vista.
-   */
-  const marcarPresentacionVista = () => {
-    window.NIDO.servicios.almacenamiento.guardarPresentacion({ vista: true });
-  };
-
-  /**
-   * Prepara la pantalla de presentación y la reproduce una sola vez.
+   * Prepara la pantalla de presentación y la reproduce.
+   * La presentación se muestra cada vez que se abre NIDO.
    * Al finalizar, realiza una transición suave hacia el flujo correspondiente.
    */
   const prepararPresentacion = () => {
@@ -671,7 +770,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Ocultar controles nativos del reproductor.
     videoPresentacion.controls = false;
 
-    // Reproducir automáticamente y una sola vez.
+    // Reproducir automáticamente.
     videoPresentacion.play().catch(() => {
       // Si el navegador bloquea la reproducción automática, se continúa igualmente.
       console.warn('NIDO: no se pudo reproducir automáticamente la presentación.');
@@ -679,7 +778,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     videoPresentacion.addEventListener('ended', () => {
-      marcarPresentacionVista();
       finalizarPresentacion(pantallaPresentacion);
     });
   };
@@ -822,11 +920,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     prepararInicio();
   }
 
-  if (presentacionYaVista()) {
-    await iniciarPantallaInicio();
-  } else {
-    await iniciarPresentacion();
-  }
+  // La presentación se reproduce cada vez que se abre NIDO,
+  // independientemente del estado de configuración.
+  await iniciarPresentacion();
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/service-worker.js').catch(() => {

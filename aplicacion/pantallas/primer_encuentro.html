@@ -1,11 +1,18 @@
 <!--
   Pantalla: Primer encuentro con Pipo (Etapa 3 — Paso 12)
 
-  Pequeña experiencia de bienvenida que presenta a Pipo al estudiante
-  y lo introduce a su primera situación educativa: la manzana y la masa.
+  Experiencia educativa breve y acompañada que presenta a Pipo al estudiante
+  y lo introduce a su primera magnitud física: la MASA.
 
-  Concepto científico: la masa se mide con una balanza.
+  Concepto científico correcto:
+  - La masa nos indica cuánta materia tiene un objeto.
+  - La masa de las cosas se mide con una balanza.
   NO se utiliza «peso» como sinónimo de «masa».
+
+  Secuencia didáctica:
+  Pipo → manzana → ¿queremos saber su masa? → ¿con qué medimos la masa?
+  → elección de balanza → explicación breve → observación de la balanza (150 g)
+  → pequeña consolidación → celebración final.
 
   Flujo: Mi NIDO → Aventuras → Primer encuentro → Actividad → Volver a Mi NIDO
 -->
@@ -32,7 +39,16 @@
     </div>
   </div>
 
-  <!-- Paso 3: Actividad — elegir instrumento -->
+  <!-- Paso 3: ¿Queremos saber su masa? -->
+  <div class="paso-experiencia oculto" id="paso-queremos-masa" aria-hidden="true">
+    <div class="tarjeta-bienvenida">
+      <div class="manzana-grande" aria-hidden="true">🍎</div>
+      <p id="mensaje-queremos-masa" class="mensaje-descubrimiento"></p>
+      <button type="button" id="boton-continuar-masa" class="boton-principal">¡Sí!</button>
+    </div>
+  </div>
+
+  <!-- Paso 4: Actividad — elegir instrumento -->
   <div class="paso-experiencia oculto" id="paso-actividad" aria-hidden="true">
     <div class="tarjeta-bienvenida">
       <div class="manzana-grande" aria-hidden="true">🍎</div>
@@ -101,15 +117,104 @@
     </div>
   </div>
 
-  <!-- Paso 4: Celebración final -->
-  <div class="paso-experiencia oculto" id="paso-final" aria-hidden="true">
+  <!-- Paso 5: Explicación breve de la masa -->
+  <div class="paso-experiencia oculto" id="paso-explicacion-masa" aria-hidden="true">
     <div class="tarjeta-bienvenida">
       <h2>¡Muy bien! 🎉</h2>
+      <div class="pipo-figura">
+        <img id="imagen-pipo-explicacion" src="" alt="Mascota de NIDO" />
+      </div>
+      <p id="mensaje-explicacion-masa" class="mensaje-pipo"></p>
+      <button type="button" id="boton-continuar-explicacion" class="boton-principal">Seguir</button>
+    </div>
+  </div>
+
+  <!-- Paso 6: Observación de la balanza -->
+  <div class="paso-experiencia oculto" id="paso-observacion-balanza" aria-hidden="true">
+    <div class="tarjeta-bienvenida">
+      <div class="balanza-observacion" aria-hidden="true">
+        <!-- Balanza electrónica moderna con manzana y lectura 150 g -->
+        <svg viewBox="0 0 200 140" width="180" height="126" role="img" aria-label="Balanza digital de cocina con una manzana mostrando 150 gramos">
+          <defs>
+            <linearGradient id="grad-cuerpo-balanza-grande" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#fafafa" />
+              <stop offset="100%" stop-color="#e0e0e0" />
+            </linearGradient>
+            <linearGradient id="grad-plataforma-balanza-grande" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#d7dde3" />
+              <stop offset="100%" stop-color="#b0bec5" />
+            </linearGradient>
+            <linearGradient id="grad-manzana-balanza-grande" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ef5350" />
+              <stop offset="100%" stop-color="#c62828" />
+            </linearGradient>
+          </defs>
+
+          <!-- Sombra en el piso -->
+          <ellipse cx="100" cy="132" rx="68" ry="6" fill="#00000022" />
+
+          <!-- Patas de goma -->
+          <rect x="44" y="118" width="14" height="8" rx="4" fill="#37474f" />
+          <rect x="142" y="118" width="14" height="8" rx="4" fill="#37474f" />
+
+          <!-- Cuerpo compacto -->
+          <rect x="32" y="76" width="136" height="46" rx="10" fill="url(#grad-cuerpo-balanza-grande)" stroke="#90a4ae" stroke-width="3" />
+
+          <!-- Plataforma plana de pesaje -->
+          <rect x="32" y="76" width="136" height="12" rx="6" fill="url(#grad-plataforma-balanza-grande)" stroke="#78909c" stroke-width="2" />
+
+          <!-- Pantalla digital LCD -->
+          <rect x="64" y="96" width="72" height="20" rx="4" fill="#263238" stroke="#1c262b" stroke-width="2" />
+          <text x="100" y="112" font-family="'Courier New', Consolas, monospace" font-size="16" font-weight="bold" fill="#8fe3b0" text-anchor="middle">150 g</text>
+
+          <!-- Botón de tara -->
+          <circle cx="44" cy="106" r="3.6" fill="#78909c" stroke="#546e7a" stroke-width="1" />
+
+          <!-- Manzana sobre la plataforma -->
+          <circle cx="100" cy="58" r="20" fill="url(#grad-manzana-balanza-grande)" stroke="#b71c1c" stroke-width="2" />
+          <ellipse cx="93" cy="53" rx="6" ry="4" fill="#ffcdd2" opacity="0.5" />
+          <path d="M100 38 Q106 24 112 18" stroke="#5d4037" stroke-width="3.6" fill="none" stroke-linecap="round" />
+          <path d="M108 26 Q118 24 120 15 Q111 18 108 26 Z" fill="#66bb6a" />
+        </svg>
+      </div>
+      <p id="mensaje-observacion-balanza" class="mensaje-descubrimiento"></p>
+      <button type="button" id="boton-continuar-observacion" class="boton-principal">Seguir</button>
+    </div>
+  </div>
+
+  <!-- Paso 7: Pequeña consolidación -->
+  <div class="paso-experiencia oculto" id="paso-consolidacion" aria-hidden="true">
+    <div class="tarjeta-bienvenida">
+      <p id="pregunta-consolidacion" class="mensaje-descubrimiento"></p>
+
+      <div class="opciones-consolidacion" id="opciones-consolidacion" role="listbox" aria-label="¿Qué estamos midiendo?">
+        <button type="button" class="opcion-consolidacion" data-respuesta="masa" role="option">
+          <span class="icono-consolidacion" aria-hidden="true">⚖️</span>
+          <span class="nombre-consolidacion">La masa</span>
+        </button>
+        <button type="button" class="opcion-consolidacion" data-respuesta="tiempo" role="option">
+          <span class="icono-consolidacion" aria-hidden="true">⏱️</span>
+          <span class="nombre-consolidacion">El tiempo</span>
+        </button>
+        <button type="button" class="opcion-consolidacion" data-respuesta="longitud" role="option">
+          <span class="icono-consolidacion" aria-hidden="true">📏</span>
+          <span class="nombre-consolidacion">La longitud</span>
+        </button>
+      </div>
+
+      <p id="mensaje-consolidacion" class="mensaje-pipo oculto" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <!-- Paso 8: Celebración final -->
+  <div class="paso-experiencia oculto" id="paso-final" aria-hidden="true">
+    <div class="tarjeta-bienvenida">
+      <h2>¡Excelente trabajo! 🎉</h2>
       <div class="pipo-figura">
         <img id="imagen-pipo-final" src="" alt="Mascota de NIDO" />
       </div>
       <p id="mensaje-final" class="mensaje-pipo"></p>
-      <button type="button" id="boton-volver-mi-nido-encuentro" class="boton-principal">Volver a Mi NIDO</button>
+      <button type="button" id="boton-volver-mi-nido-encuentro" class="boton-principal">¡Seguimos!</button>
     </div>
   </div>
 </section>
