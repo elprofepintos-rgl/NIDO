@@ -755,13 +755,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   /**
    * Prepara la pantalla de presentación y la reproduce automáticamente.
    * Primero intenta reproducir con audio. Si el navegador bloquea el
-   * autoplay con sonido, hace fallback automático a reproducción sin sonido.
+   * autoplay con sonido, hace fallback automático a reproducción sin sonido
+   * y muestra un botón discreto para activar el sonido sin reiniciar el video.
    * La presentación se muestra cada vez que se abre NIDO.
    * Al finalizar, realiza una transición suave hacia el flujo correspondiente.
    */
   const prepararPresentacion = () => {
     const pantallaPresentacion = document.getElementById('pantalla-presentacion-nido');
     const videoPresentacion = document.getElementById('video-presentacion-nido');
+    const botonActivarSonido = document.getElementById('boton-activar-sonido');
 
     if (!pantallaPresentacion || !videoPresentacion) {
       console.error('NIDO: la pantalla de presentación no está completa.');
@@ -788,9 +790,36 @@ document.addEventListener('DOMContentLoaded', async () => {
           // Si tampoco se pudo reproducir sin sonido, continuar igualmente.
           console.warn('NIDO: no se pudo iniciar la reproducción automática.');
           continuarFlujoSegunEstado();
+          return;
         });
+
+        // Mostrar el botón para que la persona pueda activar el sonido.
+        if (botonActivarSonido) {
+          botonActivarSonido.classList.remove('oculto');
+        }
       });
     };
+
+    /**
+     * Activa el sonido del video y oculta el botón.
+     * Mantiene la posición actual del video sin reiniciarlo.
+     */
+    const activarSonido = () => {
+      videoPresentacion.muted = false;
+
+      videoPresentacion.play().then(() => {
+        if (botonActivarSonido) {
+          botonActivarSonido.classList.add('oculto');
+        }
+      }).catch(() => {
+        // Si no se pudo activar el sonido, se mantiene el botón disponible.
+        console.warn('NIDO: no se pudo activar el sonido de la presentación.');
+      });
+    };
+
+    if (botonActivarSonido) {
+      botonActivarSonido.addEventListener('click', activarSonido);
+    }
 
     // Reproducción automática al cargar.
     intentarReproduccionAutomatica();

@@ -520,6 +520,42 @@ body {
   background: transparent;
 }
 
+/* Botón flotante para activar el sonido de la presentación */
+.boton-sonido {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 999px;
+  background-color: var(--primario);
+  color: var(--blanco);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.boton-sonido:hover,
+.boton-sonido:focus {
+  transform: translateY(-2px);
+  opacity: 0.95;
+}
+
+.boton-sonido.oculto {
+  display: none;
+}
+
+.icono-sonido {
+  font-size: 1.2rem;
+  line-height: 1;
+}
 
 @media (max-width: 480px) {
   .pantalla {
@@ -533,5 +569,12 @@ body {
   .mascota-reservada {
     width: 140px;
     height: 140px;
+  }
+
+  .boton-sonido {
+    bottom: 16px;
+    right: 16px;
+    padding: 10px 14px;
+    font-size: 0.88rem;
   }
 }
