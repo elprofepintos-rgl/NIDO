@@ -36,7 +36,8 @@
     adultos: 'nido:adultos',
     estudiantes: 'nido:estudiantes',
     docentes: 'nido:docentes',
-    presentacion: 'nido:presentacion'
+    presentacion: 'nido:presentacion',
+    aventuras: 'nido:aventuras'
   };
 
   /**
@@ -211,6 +212,33 @@
   }
 
   // ------------------------------------------------------------
+  // Estado de aventuras
+  // ------------------------------------------------------------
+
+  /**
+   * Guarda el estado de las aventuras del estudiante.
+   * @param {Object} estado - Objeto con el estado de las aventuras.
+   */
+  function guardarEstadoAventuras(estado) {
+    escribirClave(CLAVES.aventuras, estado);
+  }
+
+  /**
+   * Obtiene el estado de las aventuras del estudiante.
+   * @returns {Object|null} Estado de las aventuras o null si no existe.
+   */
+  function obtenerEstadoAventuras() {
+    return leerClave(CLAVES.aventuras);
+  }
+
+  /**
+   * Elimina el estado de las aventuras del estudiante.
+   */
+  function eliminarEstadoAventuras() {
+    eliminarClave(CLAVES.aventuras);
+  }
+
+  // ------------------------------------------------------------
   // Colecciones locales (provisionales)
   // ------------------------------------------------------------
   // Estas colecciones NO son la fuente de verdad multiplataforma.
@@ -289,6 +317,9 @@
     guardarPresentacion: guardarPresentacion,
     obtenerPresentacion: obtenerPresentacion,
     eliminarPresentacion: eliminarPresentacion,
+    guardarEstadoAventuras: guardarEstadoAventuras,
+    obtenerEstadoAventuras: obtenerEstadoAventuras,
+    eliminarEstadoAventuras: eliminarEstadoAventuras,
     guardarColeccion: guardarColeccion,
     obtenerColeccion: obtenerColeccion,
     eliminarColeccion: eliminarColeccion

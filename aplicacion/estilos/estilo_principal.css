@@ -520,6 +520,67 @@ body {
   background: transparent;
 }
 
+/* Pantalla de Aventuras */
+.lista-aventuras {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 20px 0 16px;
+}
+
+.tarjeta-aventura {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border: 2px solid var(--secundario);
+  border-radius: 16px;
+  background-color: var(--gris-suave);
+  color: var(--texto);
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.tarjeta-aventura:hover,
+.tarjeta-aventura:focus {
+  transform: translateY(-2px);
+  opacity: 0.95;
+}
+
+.icono-aventura {
+  font-size: 2.4rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.info-aventura {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.titulo-aventura {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.descripcion-aventura {
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.indicador-aventura {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background-color: var(--secundario);
+  color: var(--texto);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
 /* Botón flotante para activar el sonido de la presentación */
 .boton-sonido {
   position: fixed;

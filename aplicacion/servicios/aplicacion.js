@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const RUTA_CONFIGURACION_INICIAL = 'aplicacion/pantallas/configuracion_inicial.html';
   const RUTA_ELECCION_MASCOTA = 'aplicacion/pantallas/eleccion_mascota.html';
   const RUTA_MI_NIDO = 'aplicacion/pantallas/mi_nido.html';
+  const RUTA_AVENTURAS = 'aplicacion/pantallas/aventuras.html';
   const RUTA_PRIMER_ENCUENTRO = 'aplicacion/pantallas/primer_encuentro.html';
 
   /**
@@ -463,7 +464,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (botonAventuras) {
       botonAventuras.addEventListener('click', () => {
-        iniciarPrimerEncuentro();
+        iniciarAventuras();
       });
     }
 
@@ -489,7 +490,104 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   // ------------------------------------------------------------
-  // Pantalla: Primer encuentro con Pipo (Paso 12)
+  // Pantalla: Aventuras
+  // ------------------------------------------------------------
+
+  /**
+   * Prepara la pantalla de Aventuras.
+   * Muestra el catálogo de aventuras disponibles y permite iniciarlas.
+   */
+  const prepararAventuras = () => {
+    const pantallaAventuras = document.getElementById('pantalla-aventuras');
+    const listaAventuras = document.getElementById('lista-aventuras');
+    const imagenPipoAventuras = document.getElementById('imagen-pipo-aventuras');
+    const mensajePipoAventuras = document.getElementById('mensaje-pipo-aventuras');
+    const botonVolver = document.getElementById('boton-volver-mi-nido-aventuras');
+
+    if (!pantallaAventuras || !listaAventuras) {
+      console.error('NIDO: la pantalla de aventuras no está completa.');
+      mostrarPantallaDeFalla('No se pudo cargar las aventuras.');
+      return;
+    }
+
+    // 1. Obtener la mascota asignada para acompañar visualmente.
+    const mascota = window.NIDO.servicios.mascotas.obtenerMascotaDelEstudiante();
+    const nombreMascota = mascota ? mascota.nombre : 'Pipo';
+    const imagenMascota = mascota ? mascota.imagen : '';
+
+    if (imagenPipoAventuras && imagenMascota) {
+      imagenPipoAventuras.src = imagenMascota;
+      imagenPipoAventuras.alt = nombreMascota;
+    }
+
+    if (mensajePipoAventuras) {
+      mensajePipoAventuras.textContent = nombreMascota + ' te espera para descubrir algo nuevo.';
+    }
+
+    // 2. Renderizar el catálogo de aventuras.
+    const catalogo = window.NIDO.servicios.aventuras.obtenerCatalogo();
+
+    if (!catalogo || catalogo.length === 0) {
+      const mensaje = document.createElement('p');
+      mensaje.className = 'mensaje-pipo';
+      mensaje.textContent = 'Todavía no hay aventuras disponibles.';
+      listaAventuras.appendChild(mensaje);
+    } else {
+      catalogo.forEach((aventura) => {
+        const tarjeta = document.createElement('button');
+        tarjeta.type = 'button';
+        tarjeta.className = 'tarjeta-aventura';
+        tarjeta.setAttribute('aria-label', aventura.nombre + ': ' + aventura.descripcion);
+
+        const estadoTexto = window.NIDO.servicios.aventuras.fueCompletada(aventura.id)
+          ? 'Completada'
+          : 'Disponible';
+
+        tarjeta.innerHTML =
+          '<span class="icono-aventura" aria-hidden="true">' + aventura.imagen + '</span>' +
+          '<span class="info-aventura">' +
+          '<span class="titulo-aventura">' + aventura.nombre + '</span>' +
+          '<span class="descripcion-aventura">' + aventura.descripcion + '</span>' +
+          '<span class="indicador-aventura">' + estadoTexto + '</span>' +
+          '</span>';
+
+        tarjeta.addEventListener('click', () => {
+          try {
+            window.NIDO.servicios.aventuras.iniciarAventura(aventura.id);
+          } catch (error) {
+            console.error('NIDO: no se pudo iniciar la aventura.', error);
+            return;
+          }
+          iniciarPrimerEncuentro();
+        });
+
+        listaAventuras.appendChild(tarjeta);
+      });
+    }
+
+    if (botonVolver) {
+      botonVolver.addEventListener('click', () => {
+        iniciarMiNido();
+      });
+    }
+  };
+
+  /**
+   * Carga la pantalla de Aventuras.
+   */
+  const iniciarAventuras = async () => {
+    try {
+      await cargarPantalla(RUTA_AVENTURAS);
+    } catch (error) {
+      console.error(error);
+      mostrarPantallaDeFalla('No se pudo cargar las aventuras.');
+      return;
+    }
+    prepararAventuras();
+  };
+
+  // ------------------------------------------------------------
+  // Pantalla: Primer Encuentro con Pipo (Paso 12)
   // ------------------------------------------------------------
 
   /**
@@ -729,6 +827,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (botonVolverMiNido) {
       botonVolverMiNido.addEventListener('click', () => {
+        // Marcar la aventura de masa como completada.
+        try {
+          window.NIDO.servicios.aventuras.completarAventura('masa');
+        } catch (error) {
+          console.error('NIDO: no se pudo completar la aventura.', error);
+        }
         iniciarMiNido();
       });
     }
