@@ -1,0 +1,60 @@
+<!--
+  Pantalla: Configuración inicial (Etapa 3 — Paso 8)
+
+  Solicita únicamente los datos mínimos necesarios para completar el flujo local:
+  - Nombre del adulto responsable.
+  - Nombre del estudiante.
+
+  Esta configuración local NO es una Cuenta NIDO ni una autenticación.
+  Es la identidad educativa local prevista por la arquitectura actual.
+-->
+
+<section class="pantalla bienvenida" id="pantalla-configuracion-inicial">
+  <div class="tarjeta-bienvenida">
+    <h2>Configuración inicial</h2>
+    <p>Completá estos datos para preparar NIDO en este dispositivo.</p>
+
+    <form id="formulario-configuracion-inicial" novalidate>
+      <div class="campo-formulario">
+        <label for="campo-nombre-adulto">Nombre del adulto responsable</label>
+        <input
+          type="text"
+          id="campo-nombre-adulto"
+          name="nombre-adulto"
+          autocomplete="off"
+          maxlength="60"
+          required
+          aria-required="true"
+        />
+      </div>
+
+      <div class="campo-formulario">
+        <label for="campo-nombre-estudiante">Nombre del estudiante</label>
+        <input
+          type="text"
+          id="campo-nombre-estudiante"
+          name="nombre-estudiante"
+          autocomplete="off"
+          maxlength="60"
+          required
+          aria-required="true"
+        />
+      </div>
+
+      <p id="mensaje-error-configuracion" class="mensaje-error oculto" role="alert" aria-live="assertive"></p>
+
+      <button type="submit" id="boton-confirmar-configuracion" class="boton-principal">Confirmar</button>
+    </form>
+
+    <button type="button" id="boton-volver-configuracion" class="boton-secundario">Volver</button>
+  </div>
+</section>
+
+<section class="pantalla bienvenida oculto" id="pantalla-configuracion-exitosa" aria-hidden="true">
+  <div class="tarjeta-bienvenida">
+    <h2>¡Listo!</h2>
+    <p id="texto-configuracion-exitosa">La configuración inicial se completó correctamente.</p>
+    <p class="mensaje-exito">Este dispositivo ya tiene un estudiante habitual asociado.</p>
+    <button type="button" id="boton-continuar-configuracion" class="boton-principal">Continuar</button>
+  </div>
+</section>

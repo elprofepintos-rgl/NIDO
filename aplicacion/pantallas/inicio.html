@@ -1,0 +1,39 @@
+<section class="pantalla bienvenida" id="pantalla-inicio">
+  <div class="tarjeta-bienvenida">
+    <h1>NIDO</h1>
+    <p>Bienvenido a tu espacio de aprendizaje con Pipo.</p>
+    <div class="zona-mascota">
+      <div class="mascota-reservada">
+        <img src="activos/mascotas/pipo_modelo_oficial_v1.png" alt="Pipo" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />
+      </div>
+      <p class="texto-mascota">Aquí estará tu compañero</p>
+    </div>
+    <button id="boton-comenzar" class="boton-principal">Comenzar</button>
+  </div>
+</section>
+
+<section class="pantalla bienvenida oculto" id="pantalla-roles" aria-hidden="true">
+  <div class="tarjeta-bienvenida">
+    <h2>¿Quién está ingresando?</h2>
+    <p>Seleccioná el rol que inicia la experiencia.</p>
+    <div class="opciones-rol">
+      <button class="opcion-rol" data-rol="adulto">
+        <span class="titulo-opcion">Adulto responsable</span>
+        <span class="descripcion-opcion">Configura y acompaña el espacio de aprendizaje.</span>
+      </button>
+      <button class="opcion-rol" data-rol="docente">
+        <span class="titulo-opcion">Docente</span>
+        <span class="descripcion-opcion">Crea y acompaña experiencias educativas.</span>
+      </button>
+    </div>
+    <button id="boton-volver" class="boton-secundario">Volver</button>
+  </div>
+</section>
+
+<section class="pantalla bienvenida oculto" id="pantalla-resultado" aria-hidden="true">
+  <div class="tarjeta-bienvenida">
+    <h2 id="titulo-resultado">Inicio</h2>
+    <p id="texto-resultado">La siguiente etapa se preparará según el rol seleccionado.</p>
+    <button id="boton-continuar" class="boton-principal">Volver al inicio</button>
+  </div>
+</section>

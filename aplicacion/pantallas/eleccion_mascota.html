@@ -1,0 +1,31 @@
+<!--
+  Pantalla: Elección de mascota (Etapa 3 — Paso 9)
+
+  Permite al estudiante elegir su mascota compañera.
+  Incluye la selección y la confirmación de la mascota elegida.
+
+  Flujo: Configuración inicial → Elección de mascota → Confirmación → Mi NIDO
+-->
+
+<section class="pantalla bienvenida" id="pantalla-eleccion-mascota">
+  <div class="tarjeta-bienvenida">
+    <h2>Elegí tu mascota</h2>
+    <p>Tu mascota te va a acompañar en cada aventura. Elegí la que más te guste.</p>
+
+    <div id="lista-mascotas" class="lista-mascotas" role="listbox" aria-label="Mascotas disponibles"></div>
+
+    <p id="mensaje-error-mascota" class="mensaje-error oculto" role="alert" aria-live="assertive"></p>
+
+    <button type="button" id="boton-volver-mascota" class="boton-secundario">Volver</button>
+  </div>
+</section>
+
+<section class="pantalla bienvenida oculto" id="pantalla-confirmacion-mascota" aria-hidden="true">
+  <div class="tarjeta-bienvenida">
+    <h2>¡Tu compañero!</h2>
+    <div id="zona-mascota-confirmacion" class="zona-mascota"></div>
+    <p id="texto-confirmacion-mascota">Esta es tu mascota compañera.</p>
+    <button type="button" id="boton-confirmar-mascota" class="boton-principal">¡Confirmar!</button>
+    <button type="button" id="boton-cambiar-mascota" class="boton-secundario">Elegir otra</button>
+  </div>
+</section>

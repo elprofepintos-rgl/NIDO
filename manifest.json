@@ -1,0 +1,22 @@
+{
+  "name": "NIDO",
+  "short_name": "NIDO",
+  "lang": "es-AR",
+  "start_url": ".",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#fff8f0",
+  "theme_color": "#f5a623",
+  "icons": [
+    {
+      "src": "activos/iconos/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "activos/iconos/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

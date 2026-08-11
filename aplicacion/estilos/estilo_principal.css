@@ -1,0 +1,485 @@
+:root {
+  --fondo: #fff7ef;
+  --primario: #f4a261;
+  --secundario: #f9d29d;
+  --texto: #4d3b2d;
+  --blanco: #ffffff;
+  --gris-suave: #f1e6dc;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: 'Arial', 'Helvetica', sans-serif;
+  background-color: var(--fondo);
+  color: var(--texto);
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.contenedor-principal {
+  width: 100%;
+  max-width: 520px;
+}
+
+.pantalla {
+  background: var(--blanco);
+  border: 2px solid var(--secundario);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.tarjeta-bienvenida {
+  text-align: center;
+}
+
+.tarjeta-bienvenida h1 {
+  margin: 0 0 14px;
+  font-size: 2.4rem;
+}
+
+.tarjeta-bienvenida p {
+  margin: 0 0 22px;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.zona-mascota {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.mascota-reservada {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #f9d29d 0%, #f4a261 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: var(--texto);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.texto-mascota {
+  margin: 0;
+  font-size: 0.96rem;
+}
+
+.boton-principal {
+  width: 100%;
+  max-width: 320px;
+  padding: 16px 24px;
+  margin: 0 auto;
+  border: none;
+  border-radius: 18px;
+  background-color: var(--primario);
+  color: var(--blanco);
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.boton-principal:hover,
+.boton-principal:focus {
+  transform: translateY(-2px);
+  opacity: 0.95;
+}
+
+.boton-principal:disabled {
+  background-color: #e6b085;
+  cursor: default;
+}
+
+.boton-secundario {
+  width: 100%;
+  max-width: 320px;
+  padding: 12px 20px;
+  margin: 14px auto 0;
+  border: 1px solid var(--primario);
+  border-radius: 18px;
+  background-color: var(--blanco);
+  color: var(--texto);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.oculto {
+  display: none;
+}
+
+.opciones-rol {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 20px 0 16px;
+}
+
+.opcion-rol {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 16px 18px;
+  border: 1px solid var(--secundario);
+  border-radius: 16px;
+  background-color: var(--gris-suave);
+  color: var(--texto);
+  text-align: left;
+  cursor: pointer;
+}
+
+.titulo-opcion {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.descripcion-opcion {
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* Formulario de configuración inicial */
+.campo-formulario {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0 auto 16px;
+  max-width: 320px;
+  text-align: left;
+}
+
+.campo-formulario label {
+  font-size: 0.98rem;
+  font-weight: 700;
+}
+
+.campo-formulario input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--secundario);
+  border-radius: 14px;
+  background-color: var(--blanco);
+  color: var(--texto);
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.campo-formulario input:focus {
+  outline: 2px solid var(--primario);
+  outline-offset: 1px;
+}
+
+.mensaje-error {
+  max-width: 320px;
+  margin: 0 auto 16px;
+  padding: 12px 14px;
+  border: 1px solid #c96a4a;
+  border-radius: 14px;
+  background-color: #fdeee8;
+  color: #8c3b21;
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
+.mensaje-exito {
+  max-width: 320px;
+  margin: 0 auto;
+  padding: 12px 14px;
+  border: 1px solid var(--secundario);
+  border-radius: 14px;
+  background-color: var(--gris-suave);
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
+/* Elección de mascota */
+.lista-mascotas {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 20px 0 16px;
+}
+
+.opcion-mascota {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--secundario);
+  border-radius: 16px;
+  background-color: var(--gris-suave);
+  color: var(--texto);
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.opcion-mascota:hover,
+.opcion-mascota:focus {
+  transform: translateY(-2px);
+  opacity: 0.95;
+}
+
+.mascota-miniatura {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #f9d29d 0%, #f4a261 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.mascota-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Mi NIDO */
+.saludo-mi-nido {
+  font-size: 1.8rem;
+  margin: 0 0 16px;
+}
+
+.zona-motivadora {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.pipo-figura {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #f9d29d 0%, #f4a261 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  animation: balanceo-pipo 4s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+
+.pipo-figura img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.mensaje-pipo {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--texto);
+  font-style: italic;
+}
+
+@keyframes balanceo-pipo {
+  0%,
+  100% {
+    transform: rotate(-2deg);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
+}
+
+.area-destacada {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 20px 18px;
+  border: 2px solid var(--primario);
+  border-radius: 18px;
+  background-color: #fff3e3;
+  color: var(--texto);
+  text-align: center;
+  margin-bottom: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.icono-area {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.indicador-proximo {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 999px;
+  background-color: var(--secundario);
+  color: var(--texto);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.areas-secundarias {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.tarjeta-area-secundaria {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 16px 12px;
+  border: 1px solid var(--secundario);
+  border-radius: 16px;
+  background-color: var(--gris-suave);
+  color: var(--texto);
+  text-align: center;
+}
+
+.tarjeta-area-secundaria .icono-area {
+  font-size: 1.6rem;
+}
+
+/* Primer encuentro con Pipo */
+.paso-experiencia {
+  width: 100%;
+}
+
+.manzana-grande {
+  font-size: 5rem;
+  line-height: 1;
+  margin: 0 0 16px;
+  animation: flotar-manzana 3s ease-in-out infinite;
+}
+
+@keyframes flotar-manzana {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.mensaje-descubrimiento {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0 0 20px;
+  line-height: 1.5;
+}
+
+.opciones-instrumento {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.opcion-instrumento {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border: 2px solid var(--secundario);
+  border-radius: 16px;
+  background-color: var(--gris-suave);
+  color: var(--texto);
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.opcion-instrumento:hover,
+.opcion-instrumento:focus {
+  transform: translateY(-2px);
+  opacity: 0.95;
+}
+
+.icono-instrumento {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.nombre-instrumento {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.opcion-correcta {
+  border-color: #6bbf59;
+  background-color: #e8f5e3;
+}
+
+.opcion-intento {
+  border-color: var(--primario);
+  background-color: #fff3e3;
+}
+
+/* Presentación inicial de NIDO */
+.pantalla-presentacion {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(180deg, #fff7ef 0%, #f9d29d 100%);
+  opacity: 1;
+  transition: opacity 0.8s ease;
+}
+
+.pantalla-presentacion.oculto {
+  display: flex;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: opacity 0.8s ease, visibility 0s linear 0.8s;
+}
+
+.video-presentacion {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: transparent;
+}
+
+@media (max-width: 480px) {
+  .pantalla {
+    padding: 18px;
+  }
+
+  .tarjeta-bienvenida h1 {
+    font-size: 2rem;
+  }
+
+  .mascota-reservada {
+    width: 140px;
+    height: 140px;
+  }
+}
