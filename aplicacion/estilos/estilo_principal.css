@@ -528,6 +528,61 @@ body {
   margin: 20px 0 16px;
 }
 
+.area-recorrido {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--secundario);
+  border-radius: 16px;
+  background-color: #fffaf3;
+}
+
+.encabezado-area {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 6px;
+}
+
+.tarjeta-nivel {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 2px solid var(--secundario);
+  border-radius: 14px;
+  background-color: var(--blanco);
+  color: var(--texto);
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.tarjeta-nivel:hover,
+.tarjeta-nivel:focus {
+  transform: translateY(-2px);
+  opacity: 0.95;
+}
+
+.tarjeta-nivel.completado {
+  border-color: #6bbf59;
+  background-color: #e8f5e3;
+  cursor: default;
+}
+
+.tarjeta-nivel:disabled {
+  opacity: 0.6;
+  cursor: default;
+  background-color: var(--gris-suave);
+}
+
+.icono-nivel {
+  font-size: 1.8rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
 .tarjeta-aventura {
   display: flex;
   align-items: center;

@@ -37,7 +37,8 @@
     estudiantes: 'nido:estudiantes',
     docentes: 'nido:docentes',
     presentacion: 'nido:presentacion',
-    aventuras: 'nido:aventuras'
+    aventuras: 'nido:aventuras',
+    progreso: 'nido:progreso'
   };
 
   /**
@@ -239,6 +240,33 @@
   }
 
   // ------------------------------------------------------------
+  // Progreso educativo
+  // ------------------------------------------------------------
+
+  /**
+   * Guarda el estado del progreso educativo del estudiante.
+   * @param {Object} estado - Objeto con el estado del progreso.
+   */
+  function guardarEstadoProgreso(estado) {
+    escribirClave(CLAVES.progreso, estado);
+  }
+
+  /**
+   * Obtiene el estado del progreso educativo del estudiante.
+   * @returns {Object|null} Estado del progreso o null si no existe.
+   */
+  function obtenerEstadoProgreso() {
+    return leerClave(CLAVES.progreso);
+  }
+
+  /**
+   * Elimina el estado del progreso educativo del estudiante.
+   */
+  function eliminarEstadoProgreso() {
+    eliminarClave(CLAVES.progreso);
+  }
+
+  // ------------------------------------------------------------
   // Colecciones locales (provisionales)
   // ------------------------------------------------------------
   // Estas colecciones NO son la fuente de verdad multiplataforma.
@@ -320,6 +348,9 @@
     guardarEstadoAventuras: guardarEstadoAventuras,
     obtenerEstadoAventuras: obtenerEstadoAventuras,
     eliminarEstadoAventuras: eliminarEstadoAventuras,
+    guardarEstadoProgreso: guardarEstadoProgreso,
+    obtenerEstadoProgreso: obtenerEstadoProgreso,
+    eliminarEstadoProgreso: eliminarEstadoProgreso,
     guardarColeccion: guardarColeccion,
     obtenerColeccion: obtenerColeccion,
     eliminarColeccion: eliminarColeccion

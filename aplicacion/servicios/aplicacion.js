@@ -495,7 +495,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   /**
    * Prepara la pantalla de Aventuras.
-   * Muestra el catálogo de aventuras disponibles y permite iniciarlas.
+   * Muestra el recorrido educativo con sus áreas y niveles disponibles.
    */
   const prepararAventuras = () => {
     const pantallaAventuras = document.getElementById('pantalla-aventuras');
@@ -524,44 +524,82 @@ document.addEventListener('DOMContentLoaded', async () => {
       mensajePipoAventuras.textContent = nombreMascota + ' te espera para descubrir algo nuevo.';
     }
 
-    // 2. Renderizar el catálogo de aventuras.
-    const catalogo = window.NIDO.servicios.aventuras.obtenerCatalogo();
+    // 2. Obtener el recorrido educativo.
+    const recorrido = window.NIDO.servicios.progresoEducativo.obtenerRecorrido();
 
-    if (!catalogo || catalogo.length === 0) {
+    if (!recorrido) {
       const mensaje = document.createElement('p');
       mensaje.className = 'mensaje-pipo';
       mensaje.textContent = 'Todavía no hay aventuras disponibles.';
       listaAventuras.appendChild(mensaje);
     } else {
-      catalogo.forEach((aventura) => {
-        const tarjeta = document.createElement('button');
-        tarjeta.type = 'button';
-        tarjeta.className = 'tarjeta-aventura';
-        tarjeta.setAttribute('aria-label', aventura.nombre + ': ' + aventura.descripcion);
+      // 3. Renderizar cada área del recorrido con sus niveles.
+      recorrido.areas.forEach((area) => {
+        // Solo mostrar áreas que tienen niveles definidos.
+        if (!area.niveles || area.niveles.length === 0) {
+          return;
+        }
 
-        const estadoTexto = window.NIDO.servicios.aventuras.fueCompletada(aventura.id)
-          ? 'Completada'
-          : 'Disponible';
+        const areaCompletada = window.NIDO.servicios.progresoEducativo.areaCompletada(area.id);
 
-        tarjeta.innerHTML =
-          '<span class="icono-aventura" aria-hidden="true">' + aventura.imagen + '</span>' +
+        const contenedorArea = document.createElement('div');
+        contenedorArea.className = 'area-recorrido';
+
+        const encabezadoArea = document.createElement('div');
+        encabezadoArea.className = 'encabezado-area';
+        encabezadoArea.innerHTML =
+          '<span class="icono-aventura" aria-hidden="true">' + area.icono + '</span>' +
           '<span class="info-aventura">' +
-          '<span class="titulo-aventura">' + aventura.nombre + '</span>' +
-          '<span class="descripcion-aventura">' + aventura.descripcion + '</span>' +
-          '<span class="indicador-aventura">' + estadoTexto + '</span>' +
+          '<span class="titulo-aventura">' + area.nombre + '</span>' +
+          '<span class="descripcion-aventura">' + area.descripcion + '</span>' +
+          (areaCompletada
+            ? '<span class="indicador-aventura">Completada</span>'
+            : '') +
           '</span>';
+        contenedorArea.appendChild(encabezadoArea);
 
-        tarjeta.addEventListener('click', () => {
-          try {
-            window.NIDO.servicios.aventuras.iniciarAventura(aventura.id);
-          } catch (error) {
-            console.error('NIDO: no se pudo iniciar la aventura.', error);
-            return;
+        // Renderizar los niveles del área.
+        area.niveles.forEach((nivel) => {
+          const completado = window.NIDO.servicios.progresoEducativo.nivelCompletado(nivel.id);
+          const desbloqueado = window.NIDO.servicios.progresoEducativo.nivelDesbloqueado(nivel.id);
+
+          const tarjetaNivel = document.createElement('button');
+          tarjetaNivel.type = 'button';
+          tarjetaNivel.className = 'tarjeta-nivel' + (completado ? ' completado' : '');
+          tarjetaNivel.setAttribute('aria-label', nivel.titulo + ': ' + nivel.descripcion);
+
+          const estadoNivel = completado
+            ? '✓ Completado'
+            : desbloqueado
+              ? 'Comenzar'
+              : '🔒 Bloqueado';
+
+          tarjetaNivel.innerHTML =
+            '<span class="icono-nivel" aria-hidden="true">' + (completado ? '⭐' : '🎯') + '</span>' +
+            '<span class="info-aventura">' +
+            '<span class="titulo-aventura">' + nivel.titulo + '</span>' +
+            '<span class="descripcion-aventura">' + nivel.descripcion + '</span>' +
+            '<span class="indicador-aventura">' + estadoNivel + '</span>' +
+            '</span>';
+
+          if (desbloqueado) {
+            tarjetaNivel.addEventListener('click', () => {
+              try {
+                window.NIDO.servicios.aventuras.iniciarAventura('masa');
+              } catch (error) {
+                console.error('NIDO: no se pudo iniciar la aventura.', error);
+                return;
+              }
+              iniciarPrimerEncuentro();
+            });
+          } else {
+            tarjetaNivel.disabled = true;
           }
-          iniciarPrimerEncuentro();
+
+          contenedorArea.appendChild(tarjetaNivel);
         });
 
-        listaAventuras.appendChild(tarjeta);
+        listaAventuras.appendChild(contenedorArea);
       });
     }
 
@@ -832,6 +870,12 @@ document.addEventListener('DOMContentLoaded', async () => {
           window.NIDO.servicios.aventuras.completarAventura('masa');
         } catch (error) {
           console.error('NIDO: no se pudo completar la aventura.', error);
+        }
+        // Registrar el nivel educativo como completado.
+        try {
+          window.NIDO.servicios.progresoEducativo.completarNivel('masa_manzana');
+        } catch (error) {
+          console.error('NIDO: no se pudo completar el nivel educativo.', error);
         }
         iniciarMiNido();
       });
