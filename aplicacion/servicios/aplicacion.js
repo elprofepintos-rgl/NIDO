@@ -753,18 +753,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   // ------------------------------------------------------------
 
   /**
-   * Prepara la pantalla de presentación.
-   * Muestra una invitación inicial para que el estudiante inicie el video
-   * mediante interacción del usuario, lo que permite reproducir el audio
-   * de forma compatible con navegadores modernos.
+   * Prepara la pantalla de presentación y la reproduce automáticamente.
+   * Primero intenta reproducir con audio. Si el navegador bloquea el
+   * autoplay con sonido, hace fallback automático a reproducción sin sonido.
    * La presentación se muestra cada vez que se abre NIDO.
    * Al finalizar, realiza una transición suave hacia el flujo correspondiente.
    */
   const prepararPresentacion = () => {
     const pantallaPresentacion = document.getElementById('pantalla-presentacion-nido');
     const videoPresentacion = document.getElementById('video-presentacion-nido');
-    const invitacionPresentacion = document.getElementById('invitacion-presentacion');
-    const botonIniciarPresentacion = document.getElementById('boton-iniciar-presentacion');
 
     if (!pantallaPresentacion || !videoPresentacion) {
       console.error('NIDO: la pantalla de presentación no está completa.');
@@ -776,34 +773,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     videoPresentacion.controls = false;
 
     /**
-     * Inicia la reproducción del video con audio habilitado.
-     * Se llama desde la interacción del usuario para que el navegador
-     * permita reproducir el audio del MP4.
+     * Intenta reproducir automáticamente.
+     * Primero con audio; si el navegador lo rechaza, se silencia y se reintenta.
      */
-    const iniciarVideoConAudio = () => {
-      if (invitacionPresentacion) {
-        invitacionPresentacion.classList.add('oculto');
-      }
-
-      // Habilitar el audio y reiniciar el video desde el comienzo.
+    const intentarReproduccionAutomatica = () => {
+      // Intentar con audio habilitado.
       videoPresentacion.muted = false;
-      videoPresentacion.currentTime = 0;
 
       videoPresentacion.play().catch(() => {
-        // Si play() falla, se vuelve a mostrar la invitación sin romper la aplicación.
-        console.warn('NIDO: no se pudo reproducir la presentación con audio.');
-        if (invitacionPresentacion) {
-          invitacionPresentacion.classList.remove('oculto');
-        }
+        // El navegador bloqueó el autoplay con sonido: fallback a sin sonido.
+        console.warn('NIDO: autoplay con audio bloqueado. Se reproduce sin sonido.');
+        videoPresentacion.muted = true;
+        videoPresentacion.play().catch(() => {
+          // Si tampoco se pudo reproducir sin sonido, continuar igualmente.
+          console.warn('NIDO: no se pudo iniciar la reproducción automática.');
+          continuarFlujoSegunEstado();
+        });
       });
     };
 
-    if (botonIniciarPresentacion) {
-      botonIniciarPresentacion.addEventListener('click', iniciarVideoConAudio);
-    } else {
-      // Si no existe el botón, se intenta reproducir igualmente.
-      iniciarVideoConAudio();
-    }
+    // Reproducción automática al cargar.
+    intentarReproduccionAutomatica();
 
     videoPresentacion.addEventListener('ended', () => {
       finalizarPresentacion(pantallaPresentacion);
