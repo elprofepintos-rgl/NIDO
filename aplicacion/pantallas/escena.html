@@ -29,6 +29,9 @@
 
     <div class="escena-recompensa oculto" id="escena-recompensa" aria-live="polite"></div>
 
-    <button type="button" id="escena-boton-accion" class="boton-principal oculto">Siguiente</button>
+    <!-- El botón de acción ya no se utiliza para la narrativa.
+         El motor avanza automáticamente los eventos narrativos.
+         Solo se mostrará en el futuro si algún evento requiere confirmación explícita. -->
+    <button type="button" id="escena-boton-accion" class="boton-principal oculto" aria-hidden="true" tabindex="-1"></button>
   </div>
 </section>

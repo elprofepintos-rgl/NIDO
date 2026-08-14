@@ -8,15 +8,21 @@
  * Las aventuras (aplicacion/datos/escenas.js) solo describen qué ocurre.
  *
  * Los eventos soportados:
- * - dialogar: Muestra el texto de Pipo en el globo.
+ * - dialogar: Muestra el texto de Pipo en el globo y avanza solo.
  * - mostrar_objeto / ocultar_objeto: Controla el objeto visible.
- * - preguntar: Muestra una pregunta con opciones.
- * - celebrar: Muestra celebración.
- * - recompensar: Muestra recompensa.
+ * - preguntar: Muestra una pregunta con opciones. UNICO evento que espera interacción.
+ * - celebrar: Muestra celebración y avanza solo.
+ * - recompensar: Muestra recompensa y avanza solo.
  * - terminar_aventura: Notifica al orquestador que terminó.
  *
- * El motor siempre espera que el usuario presione el botón Siguiente
- * después de cada evento visual (salvo en preguntas).
+ * El motor controla automáticamente el avance de todos los eventos narrativos.
+ * Los diálogos se escriben progresivamente (letra por letra) y avanzan
+ * después de una pequeña pausa natural. Solo los eventos de pregunta
+ * detienen el flujo para esperar la interacción del estudiante.
+ *
+ * Preparado para futura integración con voz, sincronización labial
+ * y narración de Pipo: la duración de la escritura puede ajustarse
+ * a la duración de la narración.
  */
 
 (function () {
@@ -35,10 +41,16 @@
    * @property {Array<Object>} secuencia - Eventos de la aventura.
    */
 
+  // Configuración del motor.
+  var VELOCIDAD_ESCRITURA = 28; // milisegundos por carácter
+  var PAUSA_NATURAL = 900; // pausa después de terminar la escritura
+  var PAUSA_OBJETO = 1200; // pausa después de mostrar/ocultar un objeto
+
   var zonas = null;
   var aventuraActual = null;
   var indiceEvento = 0;
-  var mostrandoDialogo = false;
+  var temporizadorEscritura = null;
+  var llamadaAlFinalizar = null;
 
   /**
    * Busca y guarda las zonas del DOM de la escena.
@@ -83,16 +95,64 @@
   }
 
   /**
-   * Muestra el globo de diálogo con el texto indicado.
-   * @param {string} texto - Texto a mostrar.
+   * Cancela cualquier escritura progresiva en curso.
    */
-  function mostrarDialogo(texto) {
+  function cancelarEscritura() {
+    if (temporizadorEscritura) {
+      clearInterval(temporizadorEscritura);
+      temporizadorEscritura = null;
+    }
+  }
+
+  /**
+   * Escribe texto progresivamente en el globo de diálogo.
+   * @param {string} texto - Texto completo a mostrar.
+   * @param {Function} alCompletar - Callback al terminar de escribir.
+   */
+  function escribirTextoProgresivo(texto, alCompletar) {
     var z = obtenerZonas();
-    z.globo.textContent = texto;
+    cancelarEscritura();
+
+    z.globo.textContent = '';
+    var indice = 0;
+    var longitud = texto.length;
+
+    // Mostrar el globo mientras se escribe.
     mostrarZona(z.globo, [z.globo, z.pregunta, z.opciones, z.recompensa, z.botonAccion]);
-    z.botonAccion.classList.remove('oculto');
-    z.botonAccion.textContent = 'Siguiente';
-    mostrandoDialogo = true;
+    z.botonAccion.classList.add('oculto');
+
+    // Si el texto es muy corto, mostrarlo directamente con escritura rápida.
+    var velocidad = longitud <= 3 ? 1 : VELOCIDAD_ESCRITURA;
+
+    temporizadorEscritura = setInterval(function () {
+      indice++;
+      z.globo.textContent = texto.substring(0, indice);
+
+      if (indice >= longitud) {
+        cancelarEscritura();
+        if (alCompletar) {
+          alCompletar();
+        }
+      }
+    }, velocidad);
+  }
+
+  /**
+   * Muestra el globo de diálogo con escritura progresiva y avance automático.
+   * @param {string} texto - Texto a mostrar.
+   * @param {Function} [despuesDeEscritura] - Callback opcional al terminar escritura.
+   */
+  function mostrarDialogo(texto, despuesDeEscritura) {
+    escribirTextoProgresivo(texto, function () {
+      // Pausa natural breve y luego continuar automáticamente.
+      setTimeout(function () {
+        if (despuesDeEscritura) {
+          despuesDeEscritura();
+        } else {
+          avanzar();
+        }
+      }, PAUSA_NATURAL);
+    });
   }
 
   /**
@@ -113,10 +173,12 @@
 
   /**
    * Muestra la pregunta con sus opciones.
+   * Este es el ÚNICO evento que detiene el flujo esperando interacción.
    * @param {Object} evento - Evento de pregunta.
    */
   function mostrarPregunta(evento) {
     var z = obtenerZonas();
+    cancelarEscritura();
     z.pregunta.textContent = evento.texto;
 
     // Limpiar opciones anteriores.
@@ -144,6 +206,7 @@
     }
 
     mostrarZona(z.pregunta, [z.globo, z.pregunta, z.opciones, z.recompensa, z.botonAccion]);
+    z.botonAccion.classList.add('oculto');
   }
 
   /**
@@ -168,9 +231,8 @@
       mostrarMensaje('¡Muy bien! 🎉');
 
       var secuenciaCorrecta = evento.responder_correcto || [];
-      var total = secuenciaCorrecta.length;
 
-      if (total === 0) {
+      if (secuenciaCorrecta.length === 0) {
         // Si no hay eventos de respuesta, avanzar.
         setTimeout(function () {
           avanzar();
@@ -178,13 +240,13 @@
         return;
       }
 
-      // Ejecutar la secuencia de respuesta correcta.
-      ejecutarSubsecuencia(secuenciaCorrecta, 0, function () {
-        // Re-habilitar opciones y continuar con la secuencia principal.
-        setTimeout(function () {
+      // Ejecutar la secuencia de respuesta correcta (avance automático).
+      setTimeout(function () {
+        ejecutarSubsecuencia(secuenciaCorrecta, 0, function () {
+          // Continuar con la secuencia principal.
           avanzar();
-        }, 1200);
-      });
+        });
+      }, 800);
     } else {
       boton.classList.add('opcion-intento');
       mostrarMensaje('Casi... Probemos otra vez.');
@@ -195,13 +257,9 @@
           op.disabled = false;
         });
         boton.classList.remove('opcion-intento');
-        var mensaje = z.globo;
-        mensaje.classList.add('oculto');
-        // Limpiar mensaje anterior.
-        var anterior = z.pregunta.querySelector('.mensaje-pipo');
-        if (anterior) {
-          anterior.remove();
-        }
+        // Ocultar el mensaje temporal.
+        z.globo.classList.add('oculto');
+        z.globo.textContent = '';
       }, 1200);
     }
   }
@@ -212,14 +270,15 @@
    */
   function mostrarMensaje(texto) {
     var z = obtenerZonas();
-    var mensaje = z.globo;
-    mensaje.textContent = texto;
-    mensaje.classList.remove('oculto');
-    mensaje.setAttribute('aria-hidden', 'false');
+    z.globo.textContent = texto;
+    z.globo.classList.remove('oculto');
+    z.globo.setAttribute('aria-hidden', 'false');
+    z.botonAccion.classList.add('oculto');
   }
 
   /**
    * Ejecuta una subsecuencia de eventos (responder_correcto / responder_incorrecto).
+   * Todos los eventos avanzan automáticamente (escritura + pausa).
    * @param {Array<Object>} subsecuencia - Eventos a ejecutar.
    * @param {number} indice - Índice actual.
    * @param {Function} alTerminar - Callback al terminar.
@@ -234,24 +293,42 @@
 
     var evento = subsecuencia[indice];
 
-    if (evento.tipo === 'dialogar') {
-      mostrarDialogo(evento.texto);
-      // Usar el botón accion para avanzar en la subsecuencia.
-      var z = obtenerZonas();
-      z.botonAccion.onclick = function () {
+    switch (evento.tipo) {
+      case 'dialogar':
+        mostrarDialogo(evento.texto, function () {
+          ejecutarSubsecuencia(subsecuencia, indice + 1, alTerminar);
+        });
+        break;
+
+      case 'mostrar_objeto':
+        mostrarObjeto(evento.objeto);
+        setTimeout(function () {
+          ejecutarSubsecuencia(subsecuencia, indice + 1, alTerminar);
+        }, PAUSA_OBJETO);
+        break;
+
+      case 'ocultar_objeto':
+        mostrarObjeto(null);
+        setTimeout(function () {
+          ejecutarSubsecuencia(subsecuencia, indice + 1, alTerminar);
+        }, PAUSA_OBJETO);
+        break;
+
+      case 'celebrar':
+        mostrarDialogo(evento.texto, function () {
+          ejecutarSubsecuencia(subsecuencia, indice + 1, alTerminar);
+        });
+        break;
+
+      case 'recompensar':
+        mostrarDialogo(evento.texto, function () {
+          ejecutarSubsecuencia(subsecuencia, indice + 1, alTerminar);
+        });
+        break;
+
+      default:
         ejecutarSubsecuencia(subsecuencia, indice + 1, alTerminar);
-      };
-    } else if (evento.tipo === 'mostrar_objeto') {
-      mostrarObjeto(evento.objeto);
-      ejecutarSubsecuencia(subsecuencia, indice + 1, alTerminar);
-    } else if (evento.tipo === 'celebrar' || evento.tipo === 'recompensar') {
-      mostrarDialogo(evento.texto);
-      var z2 = obtenerZonas();
-      z2.botonAccion.onclick = function () {
-        ejecutarSubsecuencia(subsecuencia, indice + 1, alTerminar);
-      };
-    } else {
-      ejecutarSubsecuencia(subsecuencia, indice + 1, alTerminar);
+        break;
     }
   }
 
@@ -267,26 +344,26 @@
       return;
     }
 
-    // Resetear handler del botón.
-    z.botonAccion.onclick = null;
+    // El botón de acción nunca se muestra para eventos narrativos.
     z.botonAccion.classList.add('oculto');
 
     switch (evento.tipo) {
       case 'dialogar':
         mostrarDialogo(evento.texto);
-        z.botonAccion.onclick = function () {
-          avanzar();
-        };
         break;
 
       case 'mostrar_objeto':
         mostrarObjeto(evento.objeto);
-        avanzar();
+        setTimeout(function () {
+          avanzar();
+        }, PAUSA_OBJETO);
         break;
 
       case 'ocultar_objeto':
         mostrarObjeto(null);
-        avanzar();
+        setTimeout(function () {
+          avanzar();
+        }, PAUSA_OBJETO);
         break;
 
       case 'preguntar':
@@ -295,16 +372,10 @@
 
       case 'celebrar':
         mostrarDialogo(evento.texto);
-        z.botonAccion.onclick = function () {
-          avanzar();
-        };
         break;
 
       case 'recompensar':
         mostrarDialogo(evento.texto);
-        z.botonAccion.onclick = function () {
-          avanzar();
-        };
         break;
 
       case 'terminar_aventura':
@@ -322,6 +393,7 @@
    * Avanza al siguiente evento de la secuencia.
    */
   function avanzar() {
+    cancelarEscritura();
     indiceEvento++;
     if (indiceEvento < aventuraActual.secuencia.length) {
       procesarEvento();
@@ -335,6 +407,7 @@
    * @param {string|null} siguienteAventura - Id de la siguiente aventura o null.
    */
   function finalizarAventura(siguienteAventura) {
+    cancelarEscritura();
     var z = obtenerZonas();
     z.botonAccion.classList.add('oculto');
 
@@ -344,8 +417,6 @@
       alFinalizar(siguienteAventura);
     }
   }
-
-  var llamadaAlFinalizar = null;
 
   /**
    * Inicia una aventura dentro del contenedor de la escena.
@@ -358,8 +429,8 @@
     aventuraActual = aventura;
     indiceEvento = 0;
     zonas = null;
-    mostrandoDialogo = false;
     llamadaAlFinalizar = alFinalizar;
+    cancelarEscritura();
 
     // Cargar la pantalla de escena si es necesario.
     if (contenedor.innerHTML.indexOf('pantalla-escena') === -1) {
