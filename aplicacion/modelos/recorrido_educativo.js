@@ -38,7 +38,7 @@ const CATALOGO_RECORRIDOS = [
             orden: 1,
             titulo: 'La manzana',
             descripcion: 'Acompañá a Pipo a descubrir la masa de una manzana.',
-            actividad: 'primer_encuentro_masa',
+            actividad: 'masa_manzana',
             recompensa: {
               tipo: 'estrella',
               cantidad: 1,
@@ -51,7 +51,7 @@ const CATALOGO_RECORRIDOS = [
             orden: 2,
             titulo: 'La banana',
             descripcion: 'Descubrí la masa de una banana con Pipo.',
-            actividad: 'actividad_banana',
+            actividad: 'masa_banana',
             recompensa: {
               tipo: 'estrella',
               cantidad: 1,
@@ -64,7 +64,7 @@ const CATALOGO_RECORRIDOS = [
             orden: 3,
             titulo: 'La naranja',
             descripcion: 'Ayudá a Pipo a descubrir la masa de una naranja.',
-            actividad: 'actividad_naranja',
+            actividad: 'masa_naranja',
             recompensa: {
               tipo: 'estrella',
               cantidad: 1,
@@ -77,7 +77,7 @@ const CATALOGO_RECORRIDOS = [
             orden: 4,
             titulo: 'La mochila',
             descripcion: 'Descubrí la masa de una mochila con Pipo.',
-            actividad: 'actividad_mochila',
+            actividad: 'masa_mochila',
             recompensa: {
               tipo: 'estrella',
               cantidad: 1,
@@ -90,7 +90,7 @@ const CATALOGO_RECORRIDOS = [
             orden: 5,
             titulo: 'La pelota',
             descripcion: 'Completá el recorrido descubriendo la masa de una pelota.',
-            actividad: 'actividad_pelota',
+            actividad: 'masa_pelota',
             recompensa: {
               tipo: 'estrella',
               cantidad: 1,

@@ -1,0 +1,34 @@
+<!--
+  Pantalla: Escena Única de Aventura
+
+  El Scene Engine controla esta pantalla y actualiza sus zonas.
+  Pipo permanece visible durante toda la actividad.
+
+  Zonas estables:
+  - Pipo
+  - Objeto
+  - Globo de diálogo
+  - Pregunta
+  - Opciones
+  - Recompensa
+-->
+
+<section class="pantalla bienvenida" id="pantalla-escena">
+  <div class="escena">
+    <div class="escena-pipo" id="escena-pipo">
+      <img id="escena-imagen-pipo" src="" alt="Pipo" />
+    </div>
+
+    <div class="escena-objeto" id="escena-objeto" aria-hidden="true"></div>
+
+    <div class="escena-globo" id="escena-globo" aria-live="polite"></div>
+
+    <div class="escena-pregunta oculto" id="escena-pregunta" aria-live="polite"></div>
+
+    <div class="escena-opciones oculto" id="escena-opciones" role="listbox"></div>
+
+    <div class="escena-recompensa oculto" id="escena-recompensa" aria-live="polite"></div>
+
+    <button type="button" id="escena-boton-accion" class="boton-principal oculto">Siguiente</button>
+  </div>
+</section>

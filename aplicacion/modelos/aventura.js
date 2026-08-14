@@ -24,7 +24,6 @@ const CATALOGO_AVENTURAS = [
     contenido: 'masa',
     imagen: '🍎',
     disponible: true,
-    ruta_inicio: 'primer_encuentro',
     orden: 1
   }
 ];
@@ -43,7 +42,6 @@ function obtenerCatalogoAventuras() {
       contenido: aventura.contenido,
       imagen: aventura.imagen,
       disponible: aventura.disponible,
-      ruta_inicio: aventura.ruta_inicio,
       orden: aventura.orden
     };
   });
